@@ -2,38 +2,125 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:qr_code_scanner/core/utils/log_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/presentation/branding_sales/models/product_model.dart';
-import 'package:qr_code_scanner/presentation/scan_serial/models/gas_model.dart';
-import 'package:qr_code_scanner/presentation/scan_serial/models/reason_model.dart';
-import '../repo/serial_repo.dart';
+import 'package:qr_code_scanner/presentation/home_screen/models/gas_model.dart';
+import 'package:qr_code_scanner/presentation/home_screen/models/product_model.dart';
+import 'package:qr_code_scanner/presentation/home_screen/models/reason_model.dart';
+import 'package:qr_code_scanner/presentation/scan_serial/models/qc_model.dart';
+import 'package:qr_code_scanner/presentation/scan_serial/models/serial_model.dart';
+import 'package:qr_code_scanner/service/http_service.dart';
+import '../../../core/utils/dialogs.dart';
 
 class ScanSerialController extends GetxController {
   Rx<TextEditingController> code = TextEditingController().obs;
+  RxBool isTesting = false.obs;
 
   var isLoading = false.obs;
   var isEditLoading = false.obs;
+  var isInitialized = false.obs;
 
-  RxList<ProductModel> productList = RxList.empty();
-  RxList<GasModel> gasList = RxList.empty();
-  RxList<ReasonModel> reasonList = RxList.empty();
+  SerialModel? serial;
+
   Rx<ProductModel?> selectedProduct = Rx(null);
   Rx<GasModel?> selectedGas = Rx(null);
   Rx<ReasonModel?> selectedReason = Rx(null);
 
+  Rx<QcModel?> qcData = Rx(null);
+
   static ScanSerialController get instance => Get.find<ScanSerialController>();
 
-  getDdlData() async {
+  static const String _getCommonPath = '/api_qrcode/index.php';
+
+  void updateSerial() async {
     try {
-      isLoading.value = true;
-      final result = await SerialRepo.getDdlData();
-      productList.addAll(result.products);
-      gasList.addAll(result.gases);
-      reasonList.addAll(result.reasons);
+      Map<String, dynamic> data = {
+        "dbtype": "updateSerialno",
+        "productid": selectedProduct.value!.productId,
+        "gas": selectedGas.value!.gasName,
+        "code": code.value.text,
+        "isTesting": isTesting.value ? 1 : 0
+      };
+
+      isLoading(true);
+
+      try {
+        final result = await HttpService.post(_getCommonPath, data);
+
+        if (result['status'] != 200) {
+          Get.snackbar('Error', result['message']);
+        } else {
+          LogUtil.debug(result);
+          Dialogs.showSnackBar(Get.context, "Serial No. updated");
+
+          if (!isTesting.value) {
+            // set qcData as result['data']
+            qcData.value = QcModel.fromJson(result['data']);
+
+            // for each qc row in qc data set qc_ok as "Yes"
+            qcData.value!.qc_rows!.forEach((element) {
+              element.qc_ok = element.qc_ok == null ? "Yes" : element.qc_ok;
+            });
+          }
+        }
+      } catch (e) {
+        LogUtil.error(e);
+        Get.snackbar('Error', "$e");
+      }
+
+      isLoading(false);
     } catch (e) {
-      LogUtil.error(e);
+      isLoading(false);
       Get.snackbar('Error', "$e");
-    } finally {
-      isLoading.value = false;
+    }
+  }
+
+  void updateQc() async {
+    try {
+      // for (let i = 0; i < qcData.qc_rows.length; i++) {
+      //   const element = qcData.qc_rows[i];
+      //   if (!element.qc_ok) {
+      //     toast.error("Please select QC status for all fields");
+      //     return;
+      //   }
+      // }
+
+      for (var i = 0; i < qcData.value!.qc_rows!.length; i++) {
+        final element = qcData.value!.qc_rows![i];
+        if (element.qc_ok == null) {
+          // show red snackbar
+          Get.snackbar('Error', "Please select QC status for all fields",
+              backgroundColor: Colors.red);
+          return;
+        }
+      }
+
+      Map<String, dynamic> data = {
+        "dbtype": "updateQc",
+        "qcid": qcData.value!.qcid,
+        "batchid": qcData.value!.batchid,
+        "qc_rows": qcData.value!.qc_rows!.map((e) => e.toJson()).toList(),
+        "code": code.value.text
+      };
+
+      isLoading(true);
+      try {
+        final result = await HttpService.post(_getCommonPath, data);
+
+        if (result['status'] != 200) {
+          Get.snackbar('Error', result['message']);
+        } else {
+          LogUtil.debug(result);
+          Dialogs.showSnackBar(Get.context, "QC updated");
+          clear();
+        }
+      } catch (e) {
+        LogUtil.error(e);
+        Get.snackbar('Error', "$e");
+      }
+
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
+      Get.snackbar('Error', "$e");
     }
   }
 
@@ -45,18 +132,36 @@ class ScanSerialController extends GetxController {
     selectedGas.value = gas;
   }
 
-  @override
-  void onInit() {
-    getDdlData();
+  void handleQcChange(String val, String type, QcRowModel qcRow) {
+    List<QcRowModel> temp = qcData.value!.qc_rows!;
+    final idx = temp.indexWhere((x) => x.qcdtlid == qcRow.qcdtlid);
+    if (type == 'qc_ok') {
+      temp[idx].qc_ok = val;
+    } else {
+      temp[idx].qc_reason = val;
+    }
+    qcData.value = QcModel(
+        qcid: qcData.value!.qcid,
+        batchid: qcData.value!.batchid,
+        qc_rows: temp);
+  }
 
+  @override
+  void onInit() async {
+    // if (!isInitialized.value) await getDdlData();
+
+    isInitialized.value = true;
+    // code.value.text = '0224#B2K120C25397';
+    isTesting.value = false;
     super.onInit();
   }
 
   void clear() {
     code.value.clear();
-    selectedProduct.value = null;
-    selectedGas.value = null;
-    selectedReason.value = null;
+    qcData.value = null;
+    // selectedProduct.value = null;
+    // selectedGas.value = null;
+    // selectedReason.value = null;
   }
 
   @override
