@@ -38,7 +38,7 @@ class PackListView extends GetView<PacklistController> {
     // add scanned qr code to the packSerialList
     if (qrScanRes != '-1') {
       var serial = HomePageController.instance.serialList
-          .firstWhere((element) => element.serialno == qrScanRes);
+          .firstWhereOrNull((element) => element.serialno == qrScanRes);
 
       if (serial == null ||
           controller.selectedProduct.value?.productId != serial.productid ||
