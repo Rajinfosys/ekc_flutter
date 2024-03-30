@@ -82,7 +82,9 @@ class PackListView extends GetView<PacklistController> {
       ),
       body: Obx(() => !controller.isInitialized.value
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: AppColors.green,
+              ),
             )
           : SingleChildScrollView(
               child: SizedBox(
@@ -341,13 +343,22 @@ class PackListView extends GetView<PacklistController> {
                                   return;
                                 }
 
+                                if (controller.selectedProduct.value == null ||
+                                    controller.selectedGas.value == null) {
+                                  Get.snackbar(
+                                    'Warning',
+                                    'Select Product and Gas',
+                                  );
+                                  return;
+                                }
+
                                 if (controller.packSerialList.length >=
                                     int.parse(
                                         controller.total_qty.value.text)) {
                                   Get.snackbar(
-                                      'Warning', 'Total qty limit reached',
-                                      colorText: Colors.white,
-                                      backgroundColor: Colors.blue);
+                                    'Warning',
+                                    'Total qty limit reached',
+                                  );
                                   return;
                                 }
 
@@ -425,7 +436,9 @@ class PackListView extends GetView<PacklistController> {
                         Obx(
                           () => controller.isLoading.value
                               ? const Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.green,
+                                  ),
                                 )
                               : Center(
                                   child: SizedBox(

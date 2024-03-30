@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
+import 'package:qr_code_scanner/presentation/auth/controller/auth_controller.dart';
 
 import '../core/utils/log_util.dart';
 import '../core/utils/storage_util.dart';
@@ -11,16 +12,16 @@ class HttpService {
 
   static dio.Dio _dio = dio.Dio();
 
+  // static var _baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
+  static var _baseUrl = 'https://192.168.0.78:8091';
+  // static var _baseUrl = AuthController.instance.apiBase.value.text;
+
   final dio.BaseOptions _baseOptions =
       dio.BaseOptions(baseUrl: _baseUrl, headers: {
     'Content-Type': 'application/json',
     'Apitoken':
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW4iLCJleHAiOjE3MDcxMTM4MDd9.81c8uR-Vl_kZkCCPZBKT5uJ_lQe8L0zoad_WVsAES2M'
   });
-
-  // static const String _baseUrl = 'https://jagransolutionsapp.com';
-  static const String _baseUrl =
-      'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
 
   HttpService.initialize() {
     _dio = dio.Dio(_baseOptions);

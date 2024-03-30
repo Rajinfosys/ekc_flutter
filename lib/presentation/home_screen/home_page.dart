@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner/core/utils/app_color.dart';
 import 'package:qr_code_scanner/presentation/home_screen/controller/home_controller.dart';
 import 'package:qr_code_scanner/presentation/packing_list/packing_list.dart';
 import 'package:qr_code_scanner/presentation/scan_serial/scan_serial.dart';
@@ -35,7 +36,9 @@ class HomePage extends GetView<HomePageController> {
       body: Obx(
         () => !controller.isInitialized.value
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: AppColors.green,
+                ),
               )
             : SingleChildScrollView(
                 child: Column(

@@ -46,8 +46,9 @@ class HomeScreenCard extends StatelessWidget {
                   Image(
                     image: AssetImage(imageFile),
                     color: AppColors.green,
-                    height: 72,
-                    width: 72,
+                    // height: 72,
+                    height: Get.height * 0.1,
+                    width: Get.height * 0.1,
                     fit: BoxFit.fill,
                   ),
                   const SizedBox(

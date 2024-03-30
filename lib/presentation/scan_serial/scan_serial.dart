@@ -49,7 +49,9 @@ class ScanSerialView extends GetView<ScanSerialController> {
       ),
       body: Obx(() => !controller.isInitialized.value
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: AppColors.green,
+              ),
             )
           : SingleChildScrollView(
               child: SizedBox(
@@ -206,7 +208,9 @@ class ScanSerialView extends GetView<ScanSerialController> {
                         Obx(
                           () => controller.isLoading.value
                               ? const Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.green,
+                                  ),
                                 )
                               : Center(
                                   child: SizedBox(

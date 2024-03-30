@@ -2,6 +2,7 @@ import 'package:qr_code_scanner/core/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_code_scanner/service/http_service.dart';
 
 import '../../widgets/general_widgets.dart';
 import 'controller/auth_controller.dart';
@@ -119,7 +120,9 @@ class LoginView extends GetView<AuthController> {
               width: Get.width,
               child: controller.isLoading.value
                   ? const Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: AppColors.green,
+                      ),
                     )
                   : elevatedButton(
                       text: 'Login',
@@ -134,6 +137,47 @@ class LoginView extends GetView<AuthController> {
                     ),
             ),
           ),
+          SizedBox(
+            height: 50,
+          ),
+          // ElevatedButton(
+          //     style: ButtonStyle(
+          //         backgroundColor: MaterialStateProperty.all<Color>(
+          //           Colors.grey[300]!,
+          //         ),
+          //         foregroundColor:
+          //             MaterialStateProperty.all<Color>(Colors.black)),
+          //     onPressed: () {
+          //       Get.defaultDialog(
+          //         title: 'Modify IP Address',
+          //         content: Column(
+          //           children: [
+          //             myTextField(
+          //               // prefixIcon: 'assets/images/ip.png',
+          //               text: 'Enter IP Address',
+          //               controller: controller.apiBase.value,
+          //             ),
+          //             SizedBox(
+          //               height: 20,
+          //             ),
+          //             elevatedButton(
+          //               text: 'Save',
+          //               onPress: () {
+          //                 // controller.saveIpAddress();
+          //               },
+          //             ),
+          //           ],
+          //         ),
+          //       );
+          //     },
+          //     child: myText(
+          //       text: 'Modify IP Address',
+          //       style: GoogleFonts.roboto(
+          //         letterSpacing: 0,
+          //         fontSize: 15,
+          //         fontWeight: FontWeight.w400,
+          //       ),
+          //     )),
         ],
       ),
     );
