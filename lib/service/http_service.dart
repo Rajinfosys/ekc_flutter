@@ -13,7 +13,7 @@ class HttpService {
   static dio.Dio _dio = dio.Dio();
 
   // static var _baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
-  static var _baseUrl = 'https://192.168.0.78:8091';
+  static var _baseUrl = 'http://192.168.0.78:8091';
   // static var _baseUrl = AuthController.instance.apiBase.value.text;
 
   final dio.BaseOptions _baseOptions =
