@@ -1,19 +1,37 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:qr_code_scanner/presentation/auth/controller/auth_controller.dart';
 
 import '../core/utils/log_util.dart';
 import '../core/utils/storage_util.dart';
+import 'package:dio/io.dart';
+
+Dio createDio({required String baseUrl, bool trustSelfSigned = false}) {
+  // initialize dio
+  final dio = Dio()..options.baseUrl = baseUrl;
+
+  // allow self-signed certificate
+  (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+    final client = HttpClient();
+    client.badCertificateCallback = (cert, host, port) => trustSelfSigned;
+    return client;
+  };
+
+  return dio;
+}
 
 class HttpService {
   static final HttpService instance = HttpService._internal();
 
   HttpService._internal();
 
-  static dio.Dio _dio = dio.Dio();
+  // static dio.Dio _dio = dio.Dio();
+  static dio.Dio _dio = createDio(baseUrl: _baseUrl, trustSelfSigned: true);
 
   // static var _baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
-  static var _baseUrl = 'http://192.168.0.78:8091';
+  static var _baseUrl = 'https://192.168.0.78:8091';
   // static var _baseUrl = AuthController.instance.apiBase.value.text;
 
   final dio.BaseOptions _baseOptions =

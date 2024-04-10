@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:qr_code_scanner/presentation/auth/binding/login_bindings.dart';
 import 'package:qr_code_scanner/routes/app_routes.dart';
 import 'package:qr_code_scanner/service/http_service.dart';
+import 'dart:io';
 
 // List<CameraDescription> cameras = [];
 
@@ -17,6 +18,11 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
   await GetStorage.init();
+
+  // HttpClient client = HttpClient()
+  //   ..badCertificateCallback =
+  //       ((X509Certificate cert, String host, int port) => true);
+
   HttpService.initialize();
   runApp(const MyApp());
 }
