@@ -1,11 +1,11 @@
 class ProductModel {
-  int? productId;
+  String? productId;
   String? productName;
 
   ProductModel({this.productId, this.productName});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    int? productId = json['productid'];
+    String? productId = (json['productid']).toString();
     String? productName = json['product_name'];
     return ProductModel(productId: productId, productName: productName);
   }

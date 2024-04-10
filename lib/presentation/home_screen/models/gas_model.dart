@@ -1,11 +1,11 @@
 class GasModel {
-  int? gasId;
+  String? gasId;
   String? gasName;
 
   GasModel({this.gasId, this.gasName});
 
   factory GasModel.fromJson(Map<String, dynamic> json) {
-    int? gasId = json['commonid'];
+    String? gasId = (json['commonid']).toString();
     String? gasName = json['common_label'];
     return GasModel(gasId: gasId, gasName: gasName);
   }

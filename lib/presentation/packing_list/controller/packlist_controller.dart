@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:get/get_rx/get_rx.dart';
 import 'package:qr_code_scanner/core/utils/log_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner/core/utils/storage_util.dart';
+import 'package:qr_code_scanner/presentation/auth/controller/auth_controller.dart';
+import 'package:qr_code_scanner/presentation/auth/models/user_model.dart';
 import 'package:qr_code_scanner/presentation/home_screen/models/customer_model.dart';
 import 'package:qr_code_scanner/presentation/home_screen/models/gas_model.dart';
 import 'package:qr_code_scanner/presentation/home_screen/models/product_model.dart';
@@ -72,6 +77,8 @@ class PacklistController extends GetxController {
 
   void addPackingList() async {
     try {
+      var user = UserModel.fromJson(jsonDecode(StorageUtil.getUserData()!));
+
       Map<String, dynamic> data = {
         "dbtype": "savePackingList",
         "productid": selectedProduct.value!.productId,
@@ -83,6 +90,8 @@ class PacklistController extends GetxController {
         "transaction_date": transaction_date.value.text,
         "serialList": packSerialList.map((e) => e.toJson()).toList(),
         "total_quantity": packSerialList.length,
+        "location_id": user.locationId,
+        "user_id": user.login
       };
 
       LogUtil.debug(data);

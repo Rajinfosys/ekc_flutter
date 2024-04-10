@@ -27,12 +27,12 @@ class HttpService {
 
   HttpService._internal();
 
-  // static dio.Dio _dio = dio.Dio();
-  static dio.Dio _dio = createDio(baseUrl: _baseUrl, trustSelfSigned: true);
-
   // static var _baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
   static var _baseUrl = 'https://192.168.0.78:8091';
   // static var _baseUrl = AuthController.instance.apiBase.value.text;
+
+  // static dio.Dio _dio = dio.Dio();
+  static dio.Dio _dio = createDio(baseUrl: _baseUrl, trustSelfSigned: true);
 
   final dio.BaseOptions _baseOptions =
       dio.BaseOptions(baseUrl: _baseUrl, headers: {

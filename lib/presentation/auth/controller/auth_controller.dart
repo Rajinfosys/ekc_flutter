@@ -61,6 +61,7 @@ class AuthController extends GetxController {
       if (result['success']) {
         StorageUtil.writeUserData(jsonEncode(result['data']));
         StorageUtil.writeToken(result['data']['apitoken']);
+        LogUtil.debug(result['data']);
         user = UserModel.fromJson(result['data']);
       } else if (result['status'] == 404) {
         throw 'Check username or password';

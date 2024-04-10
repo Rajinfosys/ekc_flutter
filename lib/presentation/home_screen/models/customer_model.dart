@@ -1,11 +1,11 @@
 class PartyModel {
-  int? partyid;
+  String? partyid;
   String? fullname;
 
   PartyModel({this.partyid, this.fullname});
 
   factory PartyModel.fromJson(Map<String, dynamic> json) {
-    int? partyid = json['partyid'];
+    String? partyid = (json['partyid']).toString();
     String? fullname = json['fullname'];
     return PartyModel(partyid: partyid, fullname: fullname);
   }
