@@ -1,13 +1,13 @@
 class QcModel {
-  int? qcid;
-  int? batchid;
+  String? qcid;
+  String? batchid;
   List<QcRowModel>? qc_rows;
 
   QcModel({this.qcid, this.batchid, this.qc_rows});
 
   factory QcModel.fromJson(Map<String, dynamic> json) {
-    int? qcid = json['qcid'];
-    int? batchid = json['batchid'];
+    String? qcid = (json['qcid']).toString();
+    String? batchid = (json['batchid']).toString();
     List<QcRowModel> qc_rows = List<QcRowModel>.from(
         json['qc_rows'].map((x) => QcRowModel.fromJson(x)));
     return QcModel(qcid: qcid, batchid: batchid, qc_rows: qc_rows);
@@ -23,8 +23,8 @@ class QcModel {
 }
 
 class QcRowModel {
-  int? qcdtlid;
-  int? seqno;
+  String? qcdtlid;
+  String? seqno;
   String? qc_name;
   String? qc_ok;
   String? qc_reason;
@@ -39,8 +39,8 @@ class QcRowModel {
       this.serialno});
 
   factory QcRowModel.fromJson(Map<String, dynamic> json) {
-    int? qcdtlid = json['qcdtlid'];
-    int? seqno = json['seqno'];
+    String? qcdtlid = (json['qcdtlid']).toString();
+    String? seqno = (json['seqno']).toString();
     String? qc_name = json['qc_name'];
     String? qc_ok = json['qc_ok'];
     String? qc_reason = json['qc_reason'];

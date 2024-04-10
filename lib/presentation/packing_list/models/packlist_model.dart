@@ -6,11 +6,11 @@ class PacklistModel {
   String? valveMake;
   String? packing;
   String? valveWp;
-  int? actualQty;
-  int? partyId;
+  String? actualQty;
+  String? partyId;
   List<SerialNoModel>? serialList;
   String? totalQuantity;
-  int? productId;
+  String? productId;
   String? gasType;
 
   PacklistModel({
@@ -41,10 +41,10 @@ class PacklistModel {
       packing: json['packing'],
       valveWp: json['valve_wp'],
       actualQty: json['actual_qty'],
-      partyId: json['partyid'],
+      partyId: (json['partyid']).toString(),
       serialList: serialList,
-      totalQuantity: json['total_quantity'],
-      productId: json['productid'],
+      totalQuantity: (json['total_quantity']).toString(),
+      productId: (json['productid']).toString(),
       gasType: json['gas_type'],
     );
   }

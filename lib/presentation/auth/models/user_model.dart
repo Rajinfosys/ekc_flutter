@@ -2,7 +2,7 @@ class UserModel {
   String? login;
   String? name;
   String? email;
-  int? locationId;
+  String? locationId;
   String? token;
   String? refreshToken;
   String? baseUrl;
@@ -20,10 +20,11 @@ class UserModel {
     String? login = json['login'];
     String? name = json['name'];
     String? email = json['email'];
-    int? locationId = json['locationid'];
+    String? locationId = (json['locationid']).toString();
     String? token = json['apitoken'];
     String? refreshToken = json['refresh_token'];
-    String? baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
+    // String? baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
+    String? baseUrl = 'https://192.168.0.78:8091';
 
     return UserModel(
         login: login,

@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:get/get_rx/get_rx.dart';
 import 'package:qr_code_scanner/core/utils/log_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner/core/utils/storage_util.dart';
+import 'package:qr_code_scanner/presentation/auth/controller/auth_controller.dart';
+import 'package:qr_code_scanner/presentation/auth/models/user_model.dart';
 import 'package:qr_code_scanner/presentation/home_screen/models/gas_model.dart';
 import 'package:qr_code_scanner/presentation/home_screen/models/product_model.dart';
 import 'package:qr_code_scanner/presentation/home_screen/models/reason_model.dart';
@@ -32,13 +37,18 @@ class ScanSerialController extends GetxController {
 
   void updateSerial() async {
     try {
+      var user = UserModel.fromJson(jsonDecode(StorageUtil.getUserData()!));
+
       Map<String, dynamic> data = {
         "dbtype": "updateSerialno",
         "productid": selectedProduct.value!.productId,
         "gas": selectedGas.value!.gasName,
         "code": code.value.text,
-        "isTesting": isTesting.value ? 1 : 0
+        "isTesting": isTesting.value ? 1 : 0,
+        "location_id": user.locationId,
+        "user_id": user.login
       };
+      LogUtil.debug(data);
 
       isLoading(true);
 
@@ -93,12 +103,16 @@ class ScanSerialController extends GetxController {
         }
       }
 
+      var user = UserModel.fromJson(jsonDecode(StorageUtil.getUserData()!));
+
       Map<String, dynamic> data = {
         "dbtype": "updateQc",
         "qcid": qcData.value!.qcid,
         "batchid": qcData.value!.batchid,
         "qc_rows": qcData.value!.qc_rows!.map((e) => e.toJson()).toList(),
-        "code": code.value.text
+        "code": code.value.text,
+        "location_id": user.locationId,
+        "user_id": user.login
       };
 
       isLoading(true);

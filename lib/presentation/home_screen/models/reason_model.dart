@@ -1,11 +1,11 @@
 class ReasonModel {
-  int? reasonId;
+  String? reasonId;
   String? reasonName;
 
   ReasonModel({this.reasonId, this.reasonName});
 
   factory ReasonModel.fromJson(Map<String, dynamic> json) {
-    int? reasonId = json['commonid'];
+    String? reasonId = (json['commonid']).toString();
     String? reasonName = json['common_label'];
     return ReasonModel(reasonId: reasonId, reasonName: reasonName);
   }
