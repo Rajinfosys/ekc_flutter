@@ -1,8 +1,8 @@
-import 'package:qr_code_scanner/core/utils/app_color.dart';
+import 'package:ekc_scan/core/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:qr_code_scanner/service/http_service.dart';
+import 'package:ekc_scan/service/http_service.dart';
 
 import '../../widgets/general_widgets.dart';
 import 'controller/auth_controller.dart';

@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:qr_code_scanner/core/utils/log_util.dart';
-import 'package:qr_code_scanner/presentation/auth/auth_screen.dart';
-import 'package:qr_code_scanner/presentation/auth/models/user_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/home_page.dart';
+import 'package:ekc_scan/core/utils/log_util.dart';
+import 'package:ekc_scan/presentation/auth/auth_screen.dart';
+import 'package:ekc_scan/presentation/auth/models/user_model.dart';
+import 'package:ekc_scan/presentation/home_screen/home_page.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/service/http_service.dart';
+import 'package:ekc_scan/service/http_service.dart';
 
 import '../../../core/utils/storage_util.dart';
 import '../../../service/http_service_dynamic.dart';
@@ -25,9 +25,6 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    // apiBase.value = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
-    apiBase.value.text = 'https://192.168.0.78:8091';
 
     checkLogin();
   }

@@ -1,4 +1,4 @@
-import 'package:qr_code_scanner/presentation/home_screen/models/serialno_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/serialno_model.dart';
 
 class PacklistModel {
   DateTime? transactionDate;

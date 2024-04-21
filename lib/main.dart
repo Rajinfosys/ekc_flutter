@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:qr_code_scanner/presentation/auth/binding/login_bindings.dart';
-import 'package:qr_code_scanner/routes/app_routes.dart';
-import 'package:qr_code_scanner/service/http_service.dart';
+import 'package:ekc_scan/presentation/auth/binding/login_bindings.dart';
+import 'package:ekc_scan/routes/app_routes.dart';
+import 'package:ekc_scan/service/http_service.dart';
 import 'dart:io';
 
 // List<CameraDescription> cameras = [];

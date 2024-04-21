@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/presentation/scan_serial/controller/serial_controller.dart';
+import 'package:ekc_scan/presentation/scan_serial/controller/serial_controller.dart';
 
 class ScanSerialBinding implements Bindings {
   @override

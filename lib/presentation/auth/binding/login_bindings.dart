@@ -1,4 +1,4 @@
-import 'package:qr_code_scanner/presentation/auth/controller/auth_controller.dart';
+import 'package:ekc_scan/presentation/auth/controller/auth_controller.dart';
 import 'package:get/get.dart';
 
 class LoginBinding implements Bindings {

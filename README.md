@@ -1,4 +1,4 @@
-# qr_code_scanner
+# ekc_scan
 
 A new Flutter project.
 

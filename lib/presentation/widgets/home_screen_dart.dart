@@ -1,5 +1,5 @@
-import 'package:qr_code_scanner/core/utils/app_color.dart';
-import 'package:qr_code_scanner/widgets/general_widgets.dart';
+import 'package:ekc_scan/core/utils/app_color.dart';
+import 'package:ekc_scan/widgets/general_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

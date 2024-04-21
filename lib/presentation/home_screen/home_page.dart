@@ -1,12 +1,13 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/core/utils/app_color.dart';
-import 'package:qr_code_scanner/presentation/home_screen/controller/home_controller.dart';
-import 'package:qr_code_scanner/presentation/packing_list/packing_list.dart';
-import 'package:qr_code_scanner/presentation/scan_serial/scan_serial.dart';
-import 'package:qr_code_scanner/presentation/widgets/home_screen_dart.dart';
-import 'package:qr_code_scanner/widgets/general_widgets.dart';
+import 'package:ekc_scan/core/utils/app_color.dart';
+import 'package:ekc_scan/presentation/home_screen/controller/home_controller.dart';
+import 'package:ekc_scan/presentation/packing_list/packing_list.dart';
+import 'package:ekc_scan/presentation/scan_serial/scan_serial.dart';
+import 'package:ekc_scan/presentation/widgets/home_screen_dart.dart';
+import 'package:ekc_scan/widgets/general_widgets.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomePage extends GetView<HomePageController> {
   const HomePage({super.key});
@@ -32,6 +33,19 @@ class HomePage extends GetView<HomePageController> {
             ),
           )
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0, right: 16),
+        child: FloatingActionButton(
+          onPressed: () async {
+            controller.isInitialized.value = false;
+            await controller.getDdlData();
+            controller.isInitialized.value = true;
+          },
+          backgroundColor: AppColors.white2,
+          child: const Icon(CupertinoIcons.refresh, color: AppColors.green),
+        ),
       ),
       body: Obx(
         () => !controller.isInitialized.value

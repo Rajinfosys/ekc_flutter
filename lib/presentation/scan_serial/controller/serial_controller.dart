@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:get/get_rx/get_rx.dart';
-import 'package:qr_code_scanner/core/utils/log_util.dart';
+import 'package:ekc_scan/core/utils/log_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/core/utils/storage_util.dart';
-import 'package:qr_code_scanner/presentation/auth/controller/auth_controller.dart';
-import 'package:qr_code_scanner/presentation/auth/models/user_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/models/gas_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/models/product_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/models/reason_model.dart';
-import 'package:qr_code_scanner/presentation/scan_serial/models/qc_model.dart';
-import 'package:qr_code_scanner/presentation/scan_serial/models/serial_model.dart';
-import 'package:qr_code_scanner/service/http_service.dart';
+import 'package:ekc_scan/core/utils/storage_util.dart';
+import 'package:ekc_scan/presentation/auth/controller/auth_controller.dart';
+import 'package:ekc_scan/presentation/auth/models/user_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/gas_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/product_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/reason_model.dart';
+import 'package:ekc_scan/presentation/scan_serial/models/qc_model.dart';
+import 'package:ekc_scan/presentation/scan_serial/models/serial_model.dart';
+import 'package:ekc_scan/service/http_service.dart';
 import '../../../core/utils/dialogs.dart';
 
 class ScanSerialController extends GetxController {
@@ -22,6 +22,8 @@ class ScanSerialController extends GetxController {
   var isLoading = false.obs;
   var isEditLoading = false.obs;
   var isInitialized = false.obs;
+
+  RxBool isScanning = false.obs;
 
   SerialModel? serial;
 

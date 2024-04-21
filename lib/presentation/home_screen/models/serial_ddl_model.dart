@@ -1,8 +1,8 @@
-import 'package:qr_code_scanner/presentation/home_screen/models/customer_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/models/gas_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/models/product_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/models/reason_model.dart';
-import 'package:qr_code_scanner/presentation/home_screen/models/serialno_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/customer_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/gas_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/product_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/reason_model.dart';
+import 'package:ekc_scan/presentation/home_screen/models/serialno_model.dart';
 
 class SerialDdlModel {
   // consists of arrays of products , gases and reasons
