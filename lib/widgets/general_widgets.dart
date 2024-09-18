@@ -1,8 +1,11 @@
+import 'package:ekc_scan/presentation/packing_list/controller/packlist_controller.dart';
+import 'package:ekc_scan/presentation/packing_list/models/packlist_model.dart';
+import 'package:ekc_scan/presentation/packing_list/packing_list.dart';
+import 'package:ekc_scan/presentation/packing_list/partial_packing_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../core/utils/app_color.dart';
-import '../core/utils/styles.dart';
 import '../presentation/auth/controller/auth_controller.dart';
 
 Widget myText({text, style, textAlign, maxLines}) {
@@ -189,5 +192,124 @@ Widget dropDownWidget(
         ),
       );
     }).toList(),
+  );
+}
+
+Widget cardPacklistWidget(PacklistModel packList) {
+  return Padding(
+    padding: const EdgeInsets.all(18.0),
+    child: InkWell(
+      onTap: () {
+        Get.toNamed(PartialPackListView.routeName, arguments: packList);
+      },
+      child: Container(
+        width: (Get.width),
+        decoration: BoxDecoration(boxShadow: const [
+          BoxShadow(
+            color: AppColors.shadow,
+            blurRadius: 10,
+            spreadRadius: 0.1,
+            offset: Offset(0, 10),
+          )
+        ], color: AppColors.white, borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.only(bottom: 25, right: 20, left: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    packList.partyName ?? '',
+                    overflow: TextOverflow.visible,
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      Get.toNamed(
+                        PackListView.routeName,
+                        // arguments: outlet,
+                        arguments: {
+                          'packlistid': packList.packlistId,
+                          'total_quantity': packList.totalQuantity,
+                          'actual_qty': packList.actualQty,
+                          'serialList': packList.serialList,
+                          "productid": packList.productId,
+                          "gas_type": packList.gasType,
+                          "transaction_no": packList.transactionNo,
+                          "valve_make": packList.valveMake,
+                          "valve_wp": packList.valveWp,
+                          "transaction_date": packList.transactionDate,
+                          "party_id": packList.partyId,
+                          'isEdit': true,
+                        },
+                      );
+
+                      PacklistController.instance.getPacklistDetails({
+                        'packlistid': packList.packlistId,
+                        'total_quantity': packList.totalQuantity,
+                        'actual_qty': packList.actualQty,
+                        'serialList': packList.serialList,
+                        "productid": packList.productId,
+                        "gas_type": packList.gasType,
+                        "transaction_no": packList.transactionNo,
+                        "valve_make": packList.valveMake,
+                        "valve_wp": packList.valveWp,
+                        "transaction_date": packList.transactionDate,
+                        "party_id": packList.partyId,
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.blue,
+                      // size: 35,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              'Total Qty:- ${packList.totalQuantity}',
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              'Scanned Qty:- ${packList.actualQty ?? 0}',
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            // Text(
+            //   '${outlet.city_id}',
+            //   overflow: TextOverflow.ellipsis,
+            //   style: const TextStyle(
+            //     fontSize: 16,
+            //   ),
+            // ),
+            // Text(
+            //   '${outlet.city_name}',
+            //   overflow: TextOverflow.ellipsis,
+            //   style: const TextStyle(
+            //     fontSize: 16,
+            //   ),
+            // ),
+            const SizedBox(
+              height: 15,
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }

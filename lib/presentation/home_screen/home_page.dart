@@ -1,13 +1,13 @@
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ekc_scan/core/utils/app_color.dart';
 import 'package:ekc_scan/presentation/home_screen/controller/home_controller.dart';
 import 'package:ekc_scan/presentation/packing_list/packing_list.dart';
+import 'package:ekc_scan/presentation/packing_list/partial_packing_list.dart';
 import 'package:ekc_scan/presentation/scan_serial/scan_serial.dart';
 import 'package:ekc_scan/presentation/widgets/home_screen_dart.dart';
 import 'package:ekc_scan/widgets/general_widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends GetView<HomePageController> {
   const HomePage({super.key});
@@ -79,6 +79,20 @@ class HomePage extends GetView<HomePageController> {
                                 Get.toNamed(PackListView.routeName);
                               },
                             ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            HomeScreenCard(
+                              color: Colors.lightGreen,
+                              imageFile: 'assets/images/to-do-list.png',
+                              label: "Partial Packing Lists",
+                              onTap: () {
+                                Get.toNamed(PartialPackListView.routeName);
+                              },
+                            ),
+                            SizedBox(width: 10),
                           ],
                         ),
                       ],

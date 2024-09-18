@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
-import 'package:ekc_scan/presentation/auth/controller/auth_controller.dart';
+import 'package:dio/io.dart';
 
 import '../core/utils/log_util.dart';
 import '../core/utils/storage_util.dart';
-import 'package:dio/io.dart';
 
 Dio createDio({required String baseUrl, bool trustSelfSigned = false}) {
   // initialize dio

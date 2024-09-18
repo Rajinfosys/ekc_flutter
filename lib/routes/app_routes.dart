@@ -1,3 +1,4 @@
+import 'package:ekc_scan/presentation/packing_list/partial_packing_list.dart';
 import 'package:get/get.dart';
 import 'package:ekc_scan/presentation/auth/auth_screen.dart';
 import 'package:ekc_scan/presentation/auth/splash_screen.dart';
@@ -25,5 +26,9 @@ class AppRoutes {
         name: HomePage.routeName,
         page: () => const HomePage(),
         binding: HomePageBinding()),
+    GetPage(
+        name: PartialPackListView.routeName,
+        page: () => PartialPackListView(),
+        binding: PacklistBinding()),
   ];
 }

@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:ekc_scan/core/utils/log_util.dart';
 import 'package:ekc_scan/presentation/home_screen/models/customer_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/gas_model.dart';
@@ -8,10 +5,10 @@ import 'package:ekc_scan/presentation/home_screen/models/product_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/reason_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/serial_ddl_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/serialno_model.dart';
-import 'package:ekc_scan/presentation/home_screen/repo/homepage_repo.dart';
 import 'package:ekc_scan/service/http_service.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../../core/utils/storage_util.dart';
 import '../../auth/controller/auth_controller.dart';
 
 class HomePageController extends GetxController {

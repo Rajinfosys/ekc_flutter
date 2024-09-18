@@ -1,20 +1,20 @@
 import 'dart:convert';
 
-import 'package:get/get_rx/get_rx.dart';
 import 'package:ekc_scan/core/utils/log_util.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ekc_scan/core/utils/storage_util.dart';
-import 'package:ekc_scan/presentation/auth/controller/auth_controller.dart';
 import 'package:ekc_scan/presentation/auth/models/user_model.dart';
+import 'package:ekc_scan/presentation/home_screen/controller/home_controller.dart';
 import 'package:ekc_scan/presentation/home_screen/models/customer_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/gas_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/product_model.dart';
-import 'package:ekc_scan/presentation/home_screen/models/reason_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/serialno_model.dart';
-import 'package:ekc_scan/presentation/scan_serial/models/qc_model.dart';
+import 'package:ekc_scan/presentation/packing_list/models/packlist_model.dart';
+import 'package:ekc_scan/presentation/packing_list/partial_packing_list.dart';
 import 'package:ekc_scan/presentation/scan_serial/models/serial_model.dart';
 import 'package:ekc_scan/service/http_service.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import '../../../core/utils/dialogs.dart';
 
 class PacklistController extends GetxController {
@@ -35,36 +35,6 @@ class PacklistController extends GetxController {
 
   RxList<SerialNoModel> packSerialList = RxList.empty();
 
-//   {
-//     "transaction_date": "2024-03-29",
-//     "transaction_no": "100",
-//     "valve_make": "123",
-//     "packing": "100",
-//     "valve_wp": "123",
-//     "actual_qty": "5",
-//     "dbtype": "savePackingList",
-//     "partyid": 1,
-//     "total_quantity": 2,
-//     "serialList": [
-//         {
-//             "serialno": "0224#B2K120C25397",
-//             "gas_type": "HE",
-//             "batchid": 13722,
-//             "productid": 242,
-//             "tar_weight": "10.00"
-//         },
-//         {
-//             "serialno": "0224#B2K120C25400",
-//             "gas_type": "HE",
-//             "batchid": 13723,
-//             "productid": 242,
-//             "tar_weight": ".00"
-//         }
-//     ],
-//     "productid": 242,
-//     "gas_type": "HE"
-// }
-
   Rx<TextEditingController> transaction_no = TextEditingController().obs;
   Rx<TextEditingController> valve_make = TextEditingController().obs;
   Rx<TextEditingController> packing = TextEditingController().obs;
@@ -72,6 +42,8 @@ class PacklistController extends GetxController {
   Rx<TextEditingController> total_qty = TextEditingController().obs;
   Rx<TextEditingController> transaction_date = TextEditingController().obs;
   var actual_qty = 0.obs;
+
+  RxList<PacklistModel> partialPackLists = RxList.empty();
 
   static PacklistController get instance => Get.find<PacklistController>();
 
@@ -88,13 +60,24 @@ class PacklistController extends GetxController {
         "transaction_no": transaction_no.value.text,
         "valve_make": valve_make.value.text,
         "valve_wp": valve_wp.value.text,
-        "actual_qty": total_qty.value.text,
+        "actual_qty": packSerialList.length,
         "transaction_date": transaction_date.value.text,
-        "serialList": packSerialList.map((e) => e.toJson()).toList(),
-        "total_quantity": packSerialList.length,
+        "serialList": packSerialList
+            .where((p0) => p0.packlistdtlid == null)
+            .map((e) => e.toJson())
+            .toList(),
+        "total_quantity": total_qty.value.text,
         "location_id": user.locationId,
         "user_id": user.login
       };
+
+      var arguments = Get.arguments;
+      var isEdit = false;
+      if (arguments != null && arguments['isEdit'] == true) {
+        isEdit = true;
+        data['dbtype'] = "updatePackingList";
+        data['packlistid'] = arguments['packlistid'];
+      }
 
       LogUtil.debug(data);
       // return;
@@ -107,8 +90,46 @@ class PacklistController extends GetxController {
           Get.snackbar('Error', result['message']);
         } else {
           LogUtil.debug(result);
-          Dialogs.showSnackBar(Get.context, "Packing List Added Successfully");
-          clear();
+          if (isEdit) {
+            // await getPackingList();
+            Get.back(); // back to list screen
+            Get.back(); // back to home screen
+            Get.snackbar('Success', "Packing List Updated Successfully");
+
+            // clear stack 2 times
+            clear();
+          } else {
+            Dialogs.showSnackBar(
+                Get.context, "Packing List Added Successfully");
+            clear();
+          }
+        }
+      } catch (e) {
+        LogUtil.error(e);
+        Get.snackbar('Error', "$e");
+      }
+
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
+      Get.snackbar('Error', "$e");
+    }
+  }
+
+  Future<void> getPackingList() async {
+    try {
+      var user = UserModel.fromJson(jsonDecode(StorageUtil.getUserData()!));
+
+      Map<String, dynamic> data = {"dbtype": "getPackingLists"};
+      isLoading(true);
+
+      try {
+        final result = await HttpService.post(_getCommonPath, data);
+        partialPackLists = RxList<PacklistModel>.from(
+            result['data'].map((e) => PacklistModel.fromJson(e)).toList());
+
+        if (result['status'] != 200) {
+          Get.snackbar('Error', result['message']);
         }
       } catch (e) {
         LogUtil.error(e);
@@ -138,15 +159,58 @@ class PacklistController extends GetxController {
 
   @override
   void onInit() async {
-    // if (!isInitialized.value) await getDdlData();
+    var route = Get.currentRoute;
+    LogUtil.debug(route);
+
+    if (Get.currentRoute == PartialPackListView.routeName) {
+      await getPackingList();
+    } else {
+      var today = DateTime.now();
+      transaction_date.value.text = today.toString().split(' ')[0];
+      clear();
+    }
 
     isInitialized.value = true;
 
-    var today = DateTime.now();
-    transaction_date.value.text = today.toString().split(' ')[0];
-    code.value.text = '0224#B2K120C25397';
-    isTesting.value = false;
     super.onInit();
+  }
+
+  void getPacklistDetails(details) {
+    if (details['productid'] != null) {
+      selectedProduct.value = HomePageController.instance.productList
+          .toList()
+          .firstWhere((element) => element.productId == details['productid']);
+    }
+
+    if (details['gas_type'] != null) {
+      selectedGas.value = HomePageController.instance.gasList
+          .toList()
+          .firstWhere((element) => element.gasName == details['gas_type']);
+    }
+
+    if (details['party_id'] != null) {
+      selectedParty.value = HomePageController.instance.partyList
+          .toList()
+          .firstWhere((element) => element.partyid == details['party_id']);
+    }
+
+    transaction_no.value.text = details['transaction_no'] ?? '';
+    valve_make.value.text = details['valve_make'] ?? '';
+    packing.value.text = details['packing'] ?? '';
+    valve_wp.value.text = details['valve_wp'] ?? '';
+
+    total_qty.value.text = details['total_quantity'] ?? 0;
+
+    if (details['transaction_date'] != null) {
+      transaction_date.value.text =
+          details['transaction_date'].toString().split(" ")[0];
+    }
+
+    if (details['serialList'] != null) {
+      var serialList = details['serialList'];
+
+      packSerialList = RxList<SerialNoModel>.from(serialList);
+    }
   }
 
   void clear() {

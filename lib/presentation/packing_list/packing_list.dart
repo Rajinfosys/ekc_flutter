@@ -1,24 +1,19 @@
-import 'package:get_storage/get_storage.dart';
-import 'package:ekc_scan/core/utils/dialogs.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:ekc_scan/core/utils/global_variables.dart';
 import 'package:ekc_scan/core/utils/log_util.dart';
 import 'package:ekc_scan/presentation/home_screen/controller/home_controller.dart';
 import 'package:ekc_scan/presentation/home_screen/models/customer_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/gas_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/product_model.dart';
-import 'package:ekc_scan/presentation/home_screen/models/reason_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/serialno_model.dart';
 import 'package:ekc_scan/presentation/packing_list/controller/packlist_controller.dart';
-import 'package:ekc_scan/presentation/scan_serial/controller/serial_controller.dart';
 import 'package:ekc_scan/widgets/general_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../core/utils/app_color.dart';
 
@@ -75,9 +70,17 @@ class PackListView extends GetView<PacklistController> {
         lastDate: DateTime(2100),
       );
       if (_picked != null) {
+        var temp = _picked.toString().split(" ")[0];
         controller.transaction_date.value.text =
             _picked.toString().split(" ")[0];
       }
+    }
+
+    // get arguments
+    var args = Get.arguments;
+    var isEdit = false;
+    if (args != null && args['isEdit'] == true) {
+      isEdit = true;
     }
 
     return Scaffold(
@@ -188,6 +191,7 @@ class PackListView extends GetView<PacklistController> {
                                 }
                                 return null;
                               },
+                              enabled: !isEdit,
                               items: HomePageController.instance.productList
                                   .toList(),
                               itemAsString: (ProductModel u) => u.productName!,
@@ -221,6 +225,7 @@ class PackListView extends GetView<PacklistController> {
                                 }
                                 return null;
                               },
+                              enabled: !isEdit,
                               items:
                                   HomePageController.instance.gasList.toList(),
                               itemAsString: (GasModel u) => u.gasName!,
@@ -253,6 +258,7 @@ class PackListView extends GetView<PacklistController> {
                                 }
                                 return null;
                               },
+                              enabled: !isEdit,
                               items: HomePageController.instance.partyList
                                   .toList(),
                               selectedItem: controller.selectedParty.value,
@@ -270,58 +276,58 @@ class PackListView extends GetView<PacklistController> {
                               height: 25,
                             ),
                             myTextField(
-                              text: "Invoice No.",
-                              controller: controller.transaction_no.value,
-                              validator: (String input) {
-                                return null;
-                              },
-                            ),
+                                text: "Invoice No.",
+                                controller: controller.transaction_no.value,
+                                validator: (String input) {
+                                  return null;
+                                },
+                                enabled: !isEdit),
                             SizedBox(
                               height: 10,
                             ),
                             myTextField(
-                              text: "Invoice Date",
-                              controller: controller.transaction_date.value,
-                              textInputType: TextInputType.datetime,
-                              readOnly: true,
-                              onTap: () {
-                                _selectDate();
-                              },
-                              prefixIcon: "assets/images/calendar-icon.png",
-                              validator: (String input) {
-                                return null;
-                              },
-                            ),
+                                text: "Invoice Date",
+                                controller: controller.transaction_date.value,
+                                textInputType: TextInputType.datetime,
+                                readOnly: true,
+                                onTap: () {
+                                  _selectDate();
+                                },
+                                prefixIcon: "assets/images/calendar-icon.png",
+                                validator: (String input) {
+                                  return null;
+                                },
+                                enabled: !isEdit),
                             SizedBox(
                               height: 10,
                             ),
                             myTextField(
-                              text: "Valve Make",
-                              controller: controller.valve_make.value,
-                              validator: (String input) {
-                                return null;
-                              },
-                            ),
+                                text: "Valve Make",
+                                controller: controller.valve_make.value,
+                                validator: (String input) {
+                                  return null;
+                                },
+                                enabled: !isEdit),
                             SizedBox(
                               height: 10,
                             ),
                             myTextField(
-                              text: "Valve WP",
-                              controller: controller.valve_wp.value,
-                              validator: (String input) {
-                                return null;
-                              },
-                            ),
+                                text: "Valve WP",
+                                controller: controller.valve_wp.value,
+                                validator: (String input) {
+                                  return null;
+                                },
+                                enabled: !isEdit),
                             SizedBox(
                               height: 10,
                             ),
                             myTextField(
-                              text: "Packing",
-                              controller: controller.packing.value,
-                              validator: (String input) {
-                                return null;
-                              },
-                            ),
+                                text: "Packing",
+                                controller: controller.packing.value,
+                                validator: (String input) {
+                                  return null;
+                                },
+                                enabled: !isEdit),
                             SizedBox(
                               height: 10,
                             ),
@@ -397,6 +403,7 @@ class PackListView extends GetView<PacklistController> {
                                   return;
                                 }
                                 if (value != null) {
+                                  value.packlistdtlid = null;
                                   controller.packSerialList.add(value);
                                 }
                               },
@@ -501,13 +508,18 @@ class PackListView extends GetView<PacklistController> {
                                                 .tar_weight
                                                 .toString() +
                                             ")"),
-                                        trailing: IconButton(
-                                          icon: const Icon(Icons.delete),
-                                          onPressed: () {
-                                            controller.packSerialList
-                                                .removeAt(index);
-                                          },
-                                        ),
+                                        trailing: controller
+                                                    .packSerialList[index]
+                                                    .packlistdtlid ==
+                                                null
+                                            ? IconButton(
+                                                icon: const Icon(Icons.delete),
+                                                onPressed: () {
+                                                  controller.packSerialList
+                                                      .removeAt(index);
+                                                },
+                                              )
+                                            : null,
                                         // give background color
                                         tileColor: Colors.grey[200],
                                         // give bottom border
@@ -543,16 +555,16 @@ class PackListView extends GetView<PacklistController> {
                                               return;
                                             }
 
-                                            if (int.parse(controller
-                                                    .total_qty.value.text) <=
-                                                controller
-                                                    .packSerialList.length) {
-                                              Get.snackbar('Warning',
-                                                  'Total qty cannot be less than actual qty',
-                                                  colorText: Colors.white,
-                                                  backgroundColor: Colors.blue);
-                                              return;
-                                            }
+                                            // if (int.parse(controller
+                                            //         .total_qty.value.text) <=
+                                            //     controller
+                                            //         .packSerialList.length) {
+                                            //   Get.snackbar('Warning',
+                                            //       'Total qty cannot be less than actual qty',
+                                            //       colorText: Colors.white,
+                                            //       backgroundColor: Colors.blue);
+                                            //   return;
+                                            // }
 
                                             if (controller
                                                 .packSerialList.isEmpty) {
@@ -640,7 +652,7 @@ class PackListView extends GetView<PacklistController> {
           qrScanRes = '';
           return;
         }
-
+        serial.packlistdtlid = null;
         controller.packSerialList.add(serial);
         qrScanRes = '';
       }

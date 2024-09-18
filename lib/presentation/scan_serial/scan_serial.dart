@@ -1,4 +1,4 @@
-import 'package:get_storage/get_storage.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:ekc_scan/core/utils/global_variables.dart';
 import 'package:ekc_scan/core/utils/log_util.dart';
 import 'package:ekc_scan/presentation/home_screen/controller/home_controller.dart';
@@ -9,12 +9,10 @@ import 'package:ekc_scan/presentation/scan_serial/controller/serial_controller.d
 import 'package:ekc_scan/widgets/general_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../core/utils/app_color.dart';
 

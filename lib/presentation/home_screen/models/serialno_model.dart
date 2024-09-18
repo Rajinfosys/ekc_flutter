@@ -1,4 +1,5 @@
 class SerialNoModel {
+  String? packlistdtlid;
   String? serialno;
   String? gas_type;
   String? batchid;
@@ -6,19 +7,22 @@ class SerialNoModel {
   String? tar_weight;
 
   SerialNoModel(
-      {this.serialno,
+      {this.packlistdtlid,
+      this.serialno,
       this.gas_type,
       this.batchid,
       this.productid,
       this.tar_weight});
 
   factory SerialNoModel.fromJson(Map<String, dynamic> json) {
+    String? packlistdtlid = (json['packlistdtlid']).toString();
     String? serialno = json['serialno'];
     String? gas_type = json['gas_type'];
     String? batchid = (json['batchid']).toString();
     String? productid = (json['productid']).toString();
     String? tar_weight = (json['tar_weight']).toString();
     return SerialNoModel(
+        packlistdtlid: packlistdtlid,
         serialno: serialno,
         gas_type: gas_type,
         batchid: batchid,
@@ -28,6 +32,7 @@ class SerialNoModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
+    data['packlistdtlid'] = packlistdtlid;
     data['serialno'] = serialno;
     data['gas_type'] = gas_type;
     data['batchid'] = batchid;
