@@ -17,6 +17,7 @@ import '../../../core/utils/dialogs.dart';
 class ScanSerialController extends GetxController {
   Rx<TextEditingController> code = TextEditingController().obs;
   RxBool isTesting = false.obs;
+  RxBool isClientSr = false.obs;
 
   var isLoading = false.obs;
   var isEditLoading = false.obs;
@@ -47,7 +48,8 @@ class ScanSerialController extends GetxController {
         "code": code.value.text,
         "isTesting": isTesting.value ? 1 : 0,
         "location_id": user.locationId,
-        "user_id": user.login
+        "user_id": user.login,
+        "is_client_sr": isClientSr.value ? true : false
       };
       LogUtil.debug(data);
 
@@ -113,7 +115,8 @@ class ScanSerialController extends GetxController {
         "qc_rows": qcData.value!.qc_rows!.map((e) => e.toJson()).toList(),
         "code": code.value.text,
         "location_id": user.locationId,
-        "user_id": user.login
+        "user_id": user.login,
+        "is_client_sr": isClientSr.value ? true : false
       };
 
       isLoading(true);

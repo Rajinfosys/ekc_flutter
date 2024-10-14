@@ -265,6 +265,7 @@ Widget cardPacklistWidget(PacklistModel packList) {
                         "valve_wp": packList.valveWp,
                         "transaction_date": packList.transactionDate,
                         "party_id": packList.partyId,
+                        "is_client_sr": packList.isClientSr,
                       });
                     },
                     icon: const Icon(
@@ -275,6 +276,14 @@ Widget cardPacklistWidget(PacklistModel packList) {
                   ),
                 ),
               ],
+            ),
+            Text(
+              // format date dd/mm/yyyy
+              'Date:- ${packList.transactionDate!.day}/${packList.transactionDate!.month}/${packList.transactionDate!.year}',
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
             ),
             Text(
               'Total Qty:- ${packList.totalQuantity}',

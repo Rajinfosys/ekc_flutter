@@ -38,8 +38,9 @@ class PackListView extends GetView<PacklistController> {
 
     // add scanned qr code to the packSerialList
     if (qrScanRes != '-1') {
-      var serial = HomePageController.instance.serialList
-          .firstWhereOrNull((element) => element.serialno == qrScanRes);
+      var serial = HomePageController.instance.serialList.firstWhereOrNull(
+          (element) => (element.serialno == qrScanRes ||
+              element.client_serialno == qrScanRes));
 
       if (serial == null ||
           controller.selectedProduct.value?.productId != serial.productid ||
@@ -49,8 +50,9 @@ class PackListView extends GetView<PacklistController> {
         return;
       }
 
-      if (controller.packSerialList
-          .any((element) => element.serialno == qrScanRes)) {
+      if (controller.packSerialList.any((element) =>
+          (element.serialno == qrScanRes ||
+              element.client_serialno == qrScanRes))) {
         Get.snackbar('Warning', 'Serial No. already added.',
             colorText: Colors.white, backgroundColor: Colors.blue);
         return;
@@ -174,6 +176,29 @@ class PackListView extends GetView<PacklistController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                myText(
+                                    text: "Is Client Serial No.",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18)),
+                                SizedBox(
+                                  width: 25,
+                                ),
+                                Switch(
+                                    // This bool value toggles the switch.
+                                    value: controller.isClientSr.value,
+                                    activeColor: Colors.green,
+                                    onChanged: (bool value) {
+                                      controller.isClientSr.value = value;
+                                    }),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             myText(
                                 text: "Product",
                                 style: const TextStyle(
@@ -382,10 +407,15 @@ class PackListView extends GetView<PacklistController> {
                                     item.gas_type ==
                                         controller.selectedGas.value?.gasName &&
                                     !controller.packSerialList.any((element) =>
-                                        element.serialno == item.serialno);
+                                        (element.serialno == item.serialno) ||
+                                        (element.client_serialno ==
+                                            item.client_serialno));
                               }).toList(),
                               selectedItem: null,
-                              itemAsString: (SerialNoModel u) => u.serialno!,
+                              itemAsString: (SerialNoModel u) =>
+                                  controller.isClientSr == true
+                                      ? u.client_serialno!
+                                      : u.serialno!,
                               onChanged: (SerialNoModel? value) {
                                 if (controller.total_qty.value.text.isEmpty) {
                                   Get.snackbar(
@@ -500,14 +530,19 @@ class PackListView extends GetView<PacklistController> {
                                   return Card(
                                       margin: EdgeInsets.zero,
                                       child: ListTile(
-                                        title: Text(controller
-                                                .packSerialList[index]
-                                                .serialno! +
-                                            " (wt : " +
-                                            controller.packSerialList[index]
-                                                .tar_weight
-                                                .toString() +
-                                            ")"),
+                                        title: Text(
+                                            (controller.isClientSr == true
+                                                    ? controller
+                                                        .packSerialList[index]
+                                                        .client_serialno!
+                                                    : controller
+                                                        .packSerialList[index]
+                                                        .serialno!) +
+                                                " (wt : " +
+                                                controller.packSerialList[index]
+                                                    .tar_weight
+                                                    .toString() +
+                                                ")"),
                                         trailing: controller
                                                     .packSerialList[index]
                                                     .packlistdtlid ==
@@ -633,8 +668,10 @@ class PackListView extends GetView<PacklistController> {
 
       var qrScanRes = scanData?.code?.toString();
       if (qrScanRes != null) {
-        var serial = HomePageController.instance.serialList
-            .firstWhereOrNull((element) => element.serialno == qrScanRes);
+        var serial = HomePageController.instance.serialList.firstWhereOrNull(
+            (element) =>
+                element.serialno == qrScanRes ||
+                element.client_serialno == qrScanRes);
 
         if (serial == null ||
             controller.selectedProduct.value?.productId != serial.productid ||
@@ -645,8 +682,9 @@ class PackListView extends GetView<PacklistController> {
           return;
         }
 
-        if (controller.packSerialList
-            .any((element) => element.serialno == qrScanRes)) {
+        if (controller.packSerialList.any((element) =>
+            element.serialno == qrScanRes ||
+            element.client_serialno == qrScanRes)) {
           Get.snackbar('Warning', 'Serial No. already added.',
               colorText: Colors.white, backgroundColor: Colors.blue);
           qrScanRes = '';

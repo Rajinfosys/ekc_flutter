@@ -20,6 +20,7 @@ import '../../../core/utils/dialogs.dart';
 class PacklistController extends GetxController {
   Rx<TextEditingController> code = TextEditingController().obs;
   RxBool isTesting = false.obs;
+  RxBool isClientSr = false.obs;
 
   var isLoading = false.obs;
   var isEditLoading = false.obs;
@@ -176,6 +177,10 @@ class PacklistController extends GetxController {
   }
 
   void getPacklistDetails(details) {
+    if (details['is_client_sr'] != null) {
+      isClientSr.value = details['is_client_sr'] == '1' ? true : false;
+    }
+
     if (details['productid'] != null) {
       selectedProduct.value = HomePageController.instance.productList
           .toList()

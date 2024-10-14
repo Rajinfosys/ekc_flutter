@@ -14,6 +14,7 @@ class PacklistModel {
   String? productId;
   String? gasType;
   String? partyName;
+  String? isClientSr;
 
   PacklistModel({
     this.packlistId,
@@ -29,6 +30,7 @@ class PacklistModel {
     this.productId,
     this.gasType,
     this.partyName,
+    this.isClientSr,
   });
 
   factory PacklistModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,7 @@ class PacklistModel {
       productId: (json['productid']).toString(),
       gasType: json['gas_type'],
       partyName: json['party_name'],
+      isClientSr: json['is_client_sr'],
     );
   }
 
@@ -70,6 +73,7 @@ class PacklistModel {
     data['productid'] = productId;
     data['gas_type'] = gasType;
     data['party_name'] = partyName;
+    data['is_client_sr'] = isClientSr;
     return data;
   }
 }

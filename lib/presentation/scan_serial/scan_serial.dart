@@ -164,6 +164,31 @@ class ScanSerialView extends GetView<ScanSerialController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                myText(
+                                    text: "Is Client Serial No.",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18)),
+                                SizedBox(
+                                  width: 25,
+                                ),
+                                Switch(
+                                    // This bool value toggles the switch.
+                                    value: controller.isClientSr.value,
+                                    activeColor: Colors.green,
+                                    onChanged: controller.qcData.value == null
+                                        ? (bool value) {
+                                            controller.isClientSr.value = value;
+                                          }
+                                        : null),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             myText(
                                 text: "Product",
                                 style: const TextStyle(

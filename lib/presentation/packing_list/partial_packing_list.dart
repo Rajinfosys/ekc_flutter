@@ -60,7 +60,7 @@ class PartialPackListView extends GetView<PacklistController> {
                         const Expanded(
                           child: Center(
                             child: Text(
-                              'No Colleges',
+                              'No Packing List Found',
                               style:
                                   TextStyle(color: Colors.black, fontSize: 25),
                             ),
