@@ -407,7 +407,7 @@ class PackListView extends GetView<PacklistController> {
                                     item.gas_type ==
                                         controller.selectedGas.value?.gasName &&
                                     !controller.packSerialList.any((element) =>
-                                        (element.serialno == item.serialno) ||
+                                        (element.serialno == item.serialno) &&
                                         (element.client_serialno ==
                                             item.client_serialno));
                               }).toList(),

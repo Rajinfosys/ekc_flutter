@@ -19,6 +19,8 @@ class ScanSerialController extends GetxController {
   RxBool isTesting = false.obs;
   RxBool isClientSr = false.obs;
 
+  var flashOn = false.obs;
+
   var isLoading = false.obs;
   var isEditLoading = false.obs;
   var isInitialized = false.obs;

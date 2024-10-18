@@ -92,6 +92,13 @@ class HomePageController extends GetxController {
       if (result['status'] == 200) {
         serialDdlData = SerialDdlModel.fromJson(result['data']);
 
+        // clear productlist
+        productList.clear();
+        gasList.clear();
+        reasonList.clear();
+        partyList.clear();
+        serialList.clear();
+
         productList.addAll(serialDdlData.products);
         gasList.addAll(serialDdlData.gases);
         reasonList.addAll(serialDdlData.reasons);

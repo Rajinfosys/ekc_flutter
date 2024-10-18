@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:torch_controller/torch_controller.dart';
 
 import '../../core/utils/app_color.dart';
 
@@ -20,6 +21,7 @@ class ScanSerialView extends GetView<ScanSerialController> {
   ScanSerialView({Key? key}) : super(key: key);
   static const routeName = '/scan-serial';
   final formKey = GlobalKey<FormState>();
+  final torchController = TorchController();
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrController;
@@ -145,6 +147,35 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                             fontSize: 20, color: Colors.red)),
                                   ),
                                 ),
+                                Container(
+                                  margin: const EdgeInsets.all(8),
+                                  child: ElevatedButton(
+                                      onPressed: () async {
+                                        await qrController?.toggleFlash();
+                                        // try {
+                                        //   torchController.toggle(intensity: 1);
+                                        // } catch (e) {
+                                        //   SnackBar(
+                                        //     content: Text(e.toString()),
+                                        //   );
+                                        // }
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                            Colors.grey[300]!,
+                                          ),
+                                          foregroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.black)),
+                                      child: FutureBuilder(
+                                        future: qrController?.getFlashStatus(),
+                                        builder: (context, snapshot) {
+                                          return Text(
+                                              'Flash: ${snapshot.data}');
+                                        },
+                                      )),
+                                ),
                               ],
                             ),
                           ],
@@ -167,6 +198,20 @@ class ScanSerialView extends GetView<ScanSerialController> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                // FutureBuilder<bool?>(
+                                //     future: torchController.isTorchActive,
+                                //     builder: (_, snapshot) {
+                                //       final snapshotData =
+                                //           snapshot.data ?? false;
+
+                                //       if (snapshot.connectionState ==
+                                //           ConnectionState.done)
+                                //         return Text(
+                                //             'Is torch on? ${snapshotData ? 'Yes!' : 'No :('}');
+
+                                //       return Container();
+                                //     }),
+
                                 myText(
                                     text: "Is Client Serial No.",
                                     style: const TextStyle(
@@ -342,6 +387,29 @@ class ScanSerialView extends GetView<ScanSerialController> {
                             ),
                             SizedBox(
                               height: 20,
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: Get.width * 0.5,
+                              child: elevatedButton(
+                                text: controller.flashOn.value == true
+                                    ? 'Flash Off'
+                                    : 'Flash On',
+                                onPress: () {
+                                  if (controller.flashOn.value) {
+                                    controller.flashOn(false);
+                                  } else {
+                                    controller.flashOn(true);
+                                  }
+                                  try {
+                                    torchController.toggle();
+                                  } catch (e) {
+                                    SnackBar(
+                                      content: Text(e.toString()),
+                                    );
+                                  }
+                                },
+                              ),
                             ),
                             Obx(
                               () => controller.isLoading.value
@@ -576,22 +644,24 @@ class ScanSerialView extends GetView<ScanSerialController> {
 
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
+    var scanArea = 300.0;
+
+    // adjust scan area for tablet
+    if (MediaQuery.of(context).size.width > 600) {
+      scanArea = 500.0;
+    }
+
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-        borderColor: Colors.red,
-        borderRadius: 10,
-        borderLength: 30,
-        borderWidth: 10,
-        // cutOutSize: scanArea
-      ),
+          borderColor: Colors.red,
+          borderRadius: 10,
+          borderLength: 30,
+          borderWidth: 10,
+          cutOutSize: scanArea),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }

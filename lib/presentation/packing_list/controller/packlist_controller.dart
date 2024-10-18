@@ -58,6 +58,7 @@ class PacklistController extends GetxController {
         "dbtype": "savePackingList",
         "productid": selectedProduct.value!.productId,
         "gas_type": selectedGas.value!.gasName,
+        "partyid": selectedParty.value!.partyid,
         "transaction_no": transaction_no.value.text,
         "valve_make": valve_make.value.text,
         "valve_wp": valve_wp.value.text,

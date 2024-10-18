@@ -7,6 +7,7 @@ import 'package:ekc_scan/presentation/auth/binding/login_bindings.dart';
 import 'package:ekc_scan/routes/app_routes.dart';
 import 'package:ekc_scan/service/http_service.dart';
 import 'dart:io';
+import 'package:torch_controller/torch_controller.dart';
 
 // List<CameraDescription> cameras = [];
 
@@ -36,6 +37,7 @@ void main() async {
   //       ((X509Certificate cert, String host, int port) => true);
 
   HttpService.initialize();
+  TorchController().initialize();
   runApp(const MyApp());
 }
 
