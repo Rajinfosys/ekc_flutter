@@ -23,8 +23,8 @@ class UserModel {
     String? locationId = (json['locationid']).toString();
     String? token = json['apitoken'];
     String? refreshToken = json['refresh_token'];
-    String? baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
-    // String? baseUrl = 'https://192.168.0.78:8091';
+    // String? baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/ekc_qc';
+    String? baseUrl = 'https://192.168.0.78:8091';
 
     return UserModel(
         login: login,

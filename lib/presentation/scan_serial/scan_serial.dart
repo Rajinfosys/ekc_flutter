@@ -147,35 +147,35 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                             fontSize: 20, color: Colors.red)),
                                   ),
                                 ),
-                                Container(
-                                  margin: const EdgeInsets.all(8),
-                                  child: ElevatedButton(
-                                      onPressed: () async {
-                                        await qrController?.toggleFlash();
-                                        // try {
-                                        //   torchController.toggle(intensity: 1);
-                                        // } catch (e) {
-                                        //   SnackBar(
-                                        //     content: Text(e.toString()),
-                                        //   );
-                                        // }
-                                      },
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                            Colors.grey[300]!,
-                                          ),
-                                          foregroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.black)),
-                                      child: FutureBuilder(
-                                        future: qrController?.getFlashStatus(),
-                                        builder: (context, snapshot) {
-                                          return Text(
-                                              'Flash: ${snapshot.data}');
-                                        },
-                                      )),
-                                ),
+                                // Container(
+                                //   margin: const EdgeInsets.all(8),
+                                //   child: ElevatedButton(
+                                //       onPressed: () async {
+                                //         try {
+                                //           await qrController?.toggleFlash();
+                                //           // torchController.toggle(intensity: 1);
+                                //         } catch (e) {
+                                //           SnackBar(
+                                //             content: Text(e.toString()),
+                                //           );
+                                //         }
+                                //       },
+                                //       style: ButtonStyle(
+                                //           backgroundColor:
+                                //               MaterialStateProperty.all<Color>(
+                                //             Colors.grey[300]!,
+                                //           ),
+                                //           foregroundColor:
+                                //               MaterialStateProperty.all<Color>(
+                                //                   Colors.black)),
+                                //       child: FutureBuilder(
+                                //         future: qrController?.getFlashStatus(),
+                                //         builder: (context, snapshot) {
+                                //           return Text(
+                                //               'Flash: ${snapshot.data}');
+                                //         },
+                                //       )),
+                                // ),
                               ],
                             ),
                           ],
@@ -388,29 +388,29 @@ class ScanSerialView extends GetView<ScanSerialController> {
                             SizedBox(
                               height: 20,
                             ),
-                            SizedBox(
-                              height: 50,
-                              width: Get.width * 0.5,
-                              child: elevatedButton(
-                                text: controller.flashOn.value == true
-                                    ? 'Flash Off'
-                                    : 'Flash On',
-                                onPress: () {
-                                  if (controller.flashOn.value) {
-                                    controller.flashOn(false);
-                                  } else {
-                                    controller.flashOn(true);
-                                  }
-                                  try {
-                                    torchController.toggle();
-                                  } catch (e) {
-                                    SnackBar(
-                                      content: Text(e.toString()),
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 50,
+                            //   width: Get.width * 0.5,
+                            //   child: elevatedButton(
+                            //     text: controller.flashOn.value == true
+                            //         ? 'Flash Off'
+                            //         : 'Flash On',
+                            //     onPress: () {
+                            //       if (controller.flashOn.value) {
+                            //         controller.flashOn(false);
+                            //       } else {
+                            //         controller.flashOn(true);
+                            //       }
+                            //       try {
+                            //         torchController.toggle();
+                            //       } catch (e) {
+                            //         SnackBar(
+                            //           content: Text(e.toString()),
+                            //         );
+                            //       }
+                            //     },
+                            //   ),
+                            // ),
                             Obx(
                               () => controller.isLoading.value
                                   ? const Center(
