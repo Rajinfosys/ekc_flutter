@@ -72,9 +72,9 @@ class ScanSerialController extends GetxController {
             qcData.value = QcModel.fromJson(result['data']);
 
             // for each qc row in qc data set qc_ok as "Yes"
-            qcData.value!.qc_rows!.forEach((element) {
-              element.qc_ok = element.qc_ok == null ? "Yes" : element.qc_ok;
-            });
+            for (var element in qcData.value!.qc_rows!) {
+              element.qc_ok = element.qc_ok ?? "Yes";
+            }
           }
         }
       } catch (e) {
@@ -178,11 +178,12 @@ class ScanSerialController extends GetxController {
   }
 
   void clear() {
+    isClientSr.value = false;
     code.value.clear();
     qcData.value = null;
-    // selectedProduct.value = null;
-    // selectedGas.value = null;
-    // selectedReason.value = null;
+    selectedProduct.value = null;
+    selectedGas.value = null;
+    selectedReason.value = null;
   }
 
   @override

@@ -283,7 +283,7 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 SizedBox(
-                                                  width: 65,
+                                                  width: 50,
                                                   child: myText(
                                                       maxLines: 2,
                                                       text: controller
