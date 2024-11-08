@@ -19,6 +19,7 @@ class ScanSerialController extends GetxController {
   RxBool isTesting = false.obs;
   RxBool isClientSr = false.obs;
 
+
   var flashOn = false.obs;
 
   var isLoading = false.obs;
@@ -37,7 +38,7 @@ class ScanSerialController extends GetxController {
 
   static ScanSerialController get instance => Get.find<ScanSerialController>();
 
-  static const String _getCommonPath = '/api_qrcode/index.php';
+  static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
 
   void updateSerial() async {
     try {
@@ -188,7 +189,6 @@ class ScanSerialController extends GetxController {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-
     code.value.dispose();
   }
 }

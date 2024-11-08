@@ -1,4 +1,6 @@
 import 'package:ekc_scan/presentation/packing_list/partial_packing_list.dart';
+import 'package:ekc_scan/presentation/qrscanner/binding/qr_scanner_bindings.dart';
+import 'package:ekc_scan/presentation/qrscanner/qr_scanner_screen.dart';
 import 'package:get/get.dart';
 import 'package:ekc_scan/presentation/auth/auth_screen.dart';
 import 'package:ekc_scan/presentation/auth/splash_screen.dart';
@@ -17,11 +19,14 @@ class AppRoutes {
     GetPage(
         name: ScanSerialView.routeName,
         page: () => ScanSerialView(),
-        binding: ScanSerialBinding()),
+        bindings: [
+          ScanSerialBinding(),
+          QRScannerBindings()
+        ]),
     GetPage(
         name: PackListView.routeName,
         page: () => PackListView(),
-        binding: PacklistBinding()),
+        bindings: [PacklistBinding(),QRScannerBindings()]),
     GetPage(
         name: HomePage.routeName,
         page: () => const HomePage(),
@@ -30,5 +35,9 @@ class AppRoutes {
         name: PartialPackListView.routeName,
         page: () => PartialPackListView(),
         binding: PacklistBinding()),
+    GetPage(
+        name: QrScannerScreen.routeName,
+        page: () => QrScannerScreen(),
+        binding: QRScannerBindings()),
   ];
 }

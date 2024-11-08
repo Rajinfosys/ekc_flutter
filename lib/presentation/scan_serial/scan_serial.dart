@@ -5,17 +5,16 @@ import 'package:ekc_scan/presentation/home_screen/controller/home_controller.dar
 import 'package:ekc_scan/presentation/home_screen/models/gas_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/product_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/reason_model.dart';
+import 'package:ekc_scan/presentation/qrscanner/controller/qr_scanner_controller.dart';
 import 'package:ekc_scan/presentation/scan_serial/controller/serial_controller.dart';
 import 'package:ekc_scan/widgets/general_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:torch_controller/torch_controller.dart';
 
 import '../../core/utils/app_color.dart';
+import '../qrscanner/qr_scanner_screen.dart';
 
 class ScanSerialView extends GetView<ScanSerialController> {
   ScanSerialView({Key? key}) : super(key: key);
@@ -24,28 +23,10 @@ class ScanSerialView extends GetView<ScanSerialController> {
   final torchController = TorchController();
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? qrController;
-
-  Future<void> scanQrNormal() async {
-    String qrScanRes;
-    try {
-      qrScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      debugPrint(qrScanRes);
-    } on PlatformException {
-      qrScanRes = 'Failed to get platform version.';
-    }
-
-    // if (!mounted) return;
-    // setState(() {
-    //   _scanQrResult = qrScanRes;
-    // });
-
-    controller.code.value.text = qrScanRes;
-  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWidget(
@@ -58,132 +39,6 @@ class ScanSerialView extends GetView<ScanSerialController> {
                 color: AppColors.green,
               ),
             )
-          : controller.isScanning.value == true
-              ? Column(
-                  children: <Widget>[
-                    Expanded(flex: 9, child: _buildQrView(context)),
-                    Expanded(
-                      flex: 1,
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   crossAxisAlignment: CrossAxisAlignment.center,
-                            //   children: <Widget>[
-                            //     Container(
-                            //       margin: const EdgeInsets.all(8),
-                            //       child: ElevatedButton(
-                            //           onPressed: () async {
-                            //             await qrController?.toggleFlash();
-                            //           },
-                            //           style: ButtonStyle(
-                            //               backgroundColor:
-                            //                   MaterialStateProperty.all<Color>(
-                            //                 Colors.grey[300]!,
-                            //               ),
-                            //               foregroundColor:
-                            //                   MaterialStateProperty.all<Color>(
-                            //                       Colors.black)),
-                            //           child: FutureBuilder(
-                            //             future: qrController?.getFlashStatus(),
-                            //             builder: (context, snapshot) {
-                            //               return Text(
-                            //                   'Flash: ${snapshot.data}');
-                            //             },
-                            //           )),
-                            //     ),
-                            //     Container(
-                            //       margin: const EdgeInsets.all(8),
-                            //       child: ElevatedButton(
-                            //           onPressed: () async {
-                            //             await qrController?.flipCamera();
-                            //           },
-                            //           style: ButtonStyle(
-                            //               backgroundColor:
-                            //                   MaterialStateProperty.all<Color>(
-                            //                 Colors.grey[300]!,
-                            //               ),
-                            //               foregroundColor:
-                            //                   MaterialStateProperty.all<Color>(
-                            //                       Colors.black)),
-                            //           child: FutureBuilder(
-                            //             future: qrController?.getCameraInfo(),
-                            //             builder: (context, snapshot) {
-                            //               if (snapshot.data != null) {
-                            //                 return Text(
-                            //                     'Camera facing ${describeEnum(snapshot.data!)}');
-                            //               } else {
-                            //                 return const Text('loading');
-                            //               }
-                            //             },
-                            //           )),
-                            //     )
-                            //   ],
-                            // ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.all(8),
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      await qrController?.pauseCamera();
-                                      controller.isScanning.value = false;
-                                    },
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                          Colors.grey[300]!,
-                                        ),
-                                        foregroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.red)),
-                                    child: const Text('Cancel',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.red)),
-                                  ),
-                                ),
-                                // Container(
-                                //   margin: const EdgeInsets.all(8),
-                                //   child: ElevatedButton(
-                                //       onPressed: () async {
-                                //         try {
-                                //           await qrController?.toggleFlash();
-                                //           // torchController.toggle(intensity: 1);
-                                //         } catch (e) {
-                                //           SnackBar(
-                                //             content: Text(e.toString()),
-                                //           );
-                                //         }
-                                //       },
-                                //       style: ButtonStyle(
-                                //           backgroundColor:
-                                //               MaterialStateProperty.all<Color>(
-                                //             Colors.grey[300]!,
-                                //           ),
-                                //           foregroundColor:
-                                //               MaterialStateProperty.all<Color>(
-                                //                   Colors.black)),
-                                //       child: FutureBuilder(
-                                //         future: qrController?.getFlashStatus(),
-                                //         builder: (context, snapshot) {
-                                //           return Text(
-                                //               'Flash: ${snapshot.data}');
-                                //         },
-                                //       )),
-                                // ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )
               : SingleChildScrollView(
                   child: SizedBox(
                     width: Get.width,
@@ -198,26 +53,13 @@ class ScanSerialView extends GetView<ScanSerialController> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                // FutureBuilder<bool?>(
-                                //     future: torchController.isTorchActive,
-                                //     builder: (_, snapshot) {
-                                //       final snapshotData =
-                                //           snapshot.data ?? false;
-
-                                //       if (snapshot.connectionState ==
-                                //           ConnectionState.done)
-                                //         return Text(
-                                //             'Is torch on? ${snapshotData ? 'Yes!' : 'No :('}');
-
-                                //       return Container();
-                                //     }),
 
                                 myText(
                                     text: "Is Client Serial No.",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 18)),
-                                SizedBox(
+                                const SizedBox(
                                   width: 25,
                                 ),
                                 Switch(
@@ -231,7 +73,7 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                         : null),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             myText(
@@ -260,12 +102,12 @@ class ScanSerialView extends GetView<ScanSerialController> {
                               compareFn:
                                   (ProductModel? item1, ProductModel? item2) =>
                                       true,
-                              popupProps: PopupProps.menu(
+                              popupProps: const PopupProps.menu(
                                 isFilterOnline: true,
                                 showSearchBox: true,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             myText(
@@ -293,12 +135,12 @@ class ScanSerialView extends GetView<ScanSerialController> {
                               onChanged: controller.setGasValue,
                               compareFn: (GasModel? item1, GasModel? item2) =>
                                   true,
-                              popupProps: PopupProps.menu(
+                              popupProps: const PopupProps.menu(
                                 isFilterOnline: true,
                                 showSearchBox: true,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 25,
                             ),
                             Row(
@@ -308,20 +150,16 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                 Expanded(
                                   flex: 3,
                                   child: ElevatedButton(
-                                    // onPressed: controller.qcData.value == null
-                                    //     ? scanQrNormal
-                                    //     : null,
-                                    onPressed: () {
-                                      if (controller.qcData.value == null) {
-                                        controller.isScanning.value = true;
-                                        qrController?.resumeCamera();
+                                    onPressed: () async {
+                                      controller.code.value.text = '';
+                                      Get.toNamed(QrScannerScreen.routeName, arguments: 'scan') ;
+                                      if (QRScannerController.instance.scannedResult.value != '') {
+                                        controller.code.value.text = QRScannerController.instance.scannedResult.value;
                                       }
                                     },
 
-                                    // set qr code icon
-                                    child: const Icon(Icons.qr_code),
                                     style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
+                                        shape: WidgetStateProperty.all<
                                             RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                             borderRadius:
@@ -329,38 +167,43 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                           ),
                                         ),
                                         backgroundColor:
-                                            MaterialStateProperty.all<Color>(
+                                            WidgetStateProperty.all<Color>(
                                           Colors.grey[300]!,
                                         ),
                                         foregroundColor:
-                                            MaterialStateProperty.all<Color>(
+                                            WidgetStateProperty.all<Color>(
                                                 Colors.black)),
+
+                                    // set qr code icon
+                                    child: const Icon(Icons.qr_code),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
-                                Expanded(
-                                  flex: 7,
-                                  child: myTextField(
-                                    text: "Code",
-                                    controller: controller.code.value,
-                                    enabled: controller.qcData.value == null,
-                                    validator: (String input) {
-                                      if (input.isEmpty) {
-                                        Get.snackbar(
-                                            'Warning', 'Code is required.',
-                                            colorText: Colors.white,
-                                            backgroundColor: Colors.blue);
-                                        return '';
-                                      }
-                                      return null;
-                                    },
+                                Obx(
+                                  ()=> Expanded(
+                                    flex: 7,
+                                    child: myTextField(
+                                      text: "Code",
+                                      controller: controller.code.value,
+                                      enabled: controller.qcData.value == null,
+                                      validator: (String input) {
+                                        if (input.isEmpty) {
+                                          Get.snackbar(
+                                              'Warning', 'Code is required.',
+                                              colorText: Colors.white,
+                                              backgroundColor: Colors.blue);
+                                          return '';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Row(
@@ -371,7 +214,7 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 18)),
-                                SizedBox(
+                                const SizedBox(
                                   width: 25,
                                 ),
                                 Switch(
@@ -385,32 +228,10 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                         : null),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
-                            // SizedBox(
-                            //   height: 50,
-                            //   width: Get.width * 0.5,
-                            //   child: elevatedButton(
-                            //     text: controller.flashOn.value == true
-                            //         ? 'Flash Off'
-                            //         : 'Flash On',
-                            //     onPress: () {
-                            //       if (controller.flashOn.value) {
-                            //         controller.flashOn(false);
-                            //       } else {
-                            //         controller.flashOn(true);
-                            //       }
-                            //       try {
-                            //         torchController.toggle();
-                            //       } catch (e) {
-                            //         SnackBar(
-                            //           content: Text(e.toString()),
-                            //         );
-                            //       }
-                            //     },
-                            //   ),
-                            // ),
+
                             Obx(
                               () => controller.isLoading.value
                                   ? const Center(
@@ -443,15 +264,15 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                       ),
                                     ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             controller.qcData.value != null &&
                                     controller.qcData.value!.qc_rows!.isNotEmpty
-                                ? Container(
+                                ? SizedBox(
                                     height: 600,
                                     child: ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
+                                      physics: const NeverScrollableScrollPhysics(),
                                       itemCount: controller
                                           .qcData.value!.qc_rows!.length,
                                       itemBuilder: (context, index) {
@@ -461,7 +282,7 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: 65,
                                                   child: myText(
                                                       maxLines: 2,
@@ -475,7 +296,7 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                                               FontWeight.w600,
                                                           fontSize: 16)),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 25,
                                                 ),
                                                 Row(
@@ -488,12 +309,6 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                                           .qc_rows![index]
                                                           .qc_ok,
                                                       onChanged: (value) {
-                                                        // controller
-                                                        //         .qcData
-                                                        //         .value!
-                                                        //         .qc_rows![index]
-                                                        //         .qc_ok =
-                                                        //     value.toString();
 
                                                         controller.handleQcChange(
                                                             value.toString(),
@@ -563,7 +378,7 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                             controller
@@ -610,13 +425,13 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                                                 ReasonModel?
                                                                     item2) =>
                                                             true,
-                                                    popupProps: PopupProps.menu(
+                                                    popupProps: const PopupProps.menu(
                                                       isFilterOnline: true,
                                                       showSearchBox: true,
                                                     ),
                                                   )
                                                 : Container(),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             index !=
@@ -640,52 +455,5 @@ class ScanSerialView extends GetView<ScanSerialController> {
                   ),
                 )),
     );
-  }
-
-  Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-    var scanArea = 300.0;
-
-    // adjust scan area for tablet
-    if (MediaQuery.of(context).size.width > 600) {
-      scanArea = 500.0;
-    }
-
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
-      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController qrController) {
-    qrController.scannedDataStream.listen((scanData) {
-      // setState(() {
-      //   result = scanData;
-      //   _isScanning = false;
-      //   _scanQrResult = scanData.code.toString();
-      // });
-
-      controller.code.value.text = scanData.code.toString();
-      controller.isScanning.value = false;
-      qrController.pauseCamera();
-      qrController.resumeCamera();
-    });
-  }
-
-  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
-      );
-    }
   }
 }

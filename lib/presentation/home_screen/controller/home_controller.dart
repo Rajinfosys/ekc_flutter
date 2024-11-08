@@ -26,7 +26,7 @@ class HomePageController extends GetxController {
   RxList<PartyModel> partyList = RxList.empty();
   RxList<SerialNoModel> serialList = RxList.empty();
 
-  static const String _getCommonPath = '/api_qrcode/index.php';
+  static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
 
   void showOtherUserContextMenu() {
     showMenu(

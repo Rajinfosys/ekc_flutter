@@ -7,15 +7,17 @@ import 'package:ekc_scan/presentation/home_screen/models/gas_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/product_model.dart';
 import 'package:ekc_scan/presentation/home_screen/models/serialno_model.dart';
 import 'package:ekc_scan/presentation/packing_list/controller/packlist_controller.dart';
+import 'package:ekc_scan/presentation/qrscanner/controller/qr_scanner_controller.dart';
 import 'package:ekc_scan/widgets/general_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+// import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../core/utils/app_color.dart';
+import '../qrscanner/qr_scanner_screen.dart';
 
 class PackListView extends GetView<PacklistController> {
   PackListView({Key? key}) : super(key: key);
@@ -24,43 +26,8 @@ class PackListView extends GetView<PacklistController> {
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrController;
-  ScrollController scrollController = new ScrollController();
+  ScrollController scrollController = ScrollController();
 
-  Future<void> scanQrNormal() async {
-    String qrScanRes;
-    try {
-      qrScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      debugPrint(qrScanRes);
-    } on PlatformException {
-      qrScanRes = 'Failed to get platform version.';
-    }
-
-    // add scanned qr code to the packSerialList
-    if (qrScanRes != '-1') {
-      var serial = HomePageController.instance.serialList.firstWhereOrNull(
-          (element) => (element.serialno == qrScanRes ||
-              element.client_serialno == qrScanRes));
-
-      if (serial == null ||
-          controller.selectedProduct.value?.productId != serial.productid ||
-          controller.selectedGas.value?.gasName != serial.gas_type) {
-        Get.snackbar('Warning', 'Invalid Serial No.',
-            colorText: Colors.white, backgroundColor: Colors.blue);
-        return;
-      }
-
-      if (controller.packSerialList.any((element) =>
-          (element.serialno == qrScanRes ||
-              element.client_serialno == qrScanRes))) {
-        Get.snackbar('Warning', 'Serial No. already added.',
-            colorText: Colors.white, backgroundColor: Colors.blue);
-        return;
-      }
-
-      controller.packSerialList.add(serial);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,21 +58,6 @@ class PackListView extends GetView<PacklistController> {
         title: "Packing List",
         leading: const Icon(CupertinoIcons.arrow_left),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.only(bottom: 50.0, right: 16),
-      //   child: FloatingActionButton(
-      //     onPressed: () async {
-      //       scrollController?.animateTo(
-      //         1500.0,
-      //         duration: const Duration(milliseconds: 500),
-      //         curve: Curves.easeOut,
-      //       );
-      //     },
-      //     backgroundColor: AppColors.white2,
-      //     child: const Icon(CupertinoIcons.arrow_down, color: AppColors.green),
-      //   ),
-      // ),
       body: Obx(() => !controller.isInitialized.value
           ? const Center(
               child: CircularProgressIndicator(
@@ -137,7 +89,7 @@ class PackListView extends GetView<PacklistController> {
                                       Future.delayed(
                                         const Duration(milliseconds: 500),
                                         () {
-                                          scrollController?.jumpTo(
+                                          scrollController.jumpTo(
                                             scrollController
                                                 .position.maxScrollExtent,
                                           );
@@ -455,7 +407,7 @@ class PackListView extends GetView<PacklistController> {
                                   width: 30,
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (controller
                                         .total_qty.value.text.isEmpty) {
                                       Get.snackbar('Warning',
@@ -482,10 +434,18 @@ class PackListView extends GetView<PacklistController> {
                                       );
                                       return;
                                     }
+                                    // Navigate to the QRScannerScreen
+                                    Get.toNamed(QrScannerScreen.routeName);
 
+                                    // Optionally handle the scanned result
+                                    if (QRScannerController.instance.scannedResult.value != null) {
+                                      // Do something with the scanned result
+                                      // For example, display it or store it
+                                      print('Scanned QR Code: ${QRScannerController.instance.scannedResult.value}');
+                                    }
                                     // scanQrNormal();
-                                    controller.isScanning.value = true;
-                                    qrController?.resumeCamera();
+                                    // controller.isScanning.value = true;
+                                    // qrController?.resumeCamera();
                                   },
                                   // set qr code icon
                                   child: Row(
