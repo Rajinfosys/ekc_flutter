@@ -103,7 +103,7 @@ class HomePage extends GetView<HomePageController> {
       ),
       bottomSheet: Container(
         margin: const EdgeInsets.all(12.0),
-        child: myText(text: 'App Version - 1.0'),
+        child: myText(text: 'App Version - 1.1.5'),
       ),
     );
   }

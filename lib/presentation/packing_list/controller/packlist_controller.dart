@@ -26,6 +26,7 @@ class PacklistController extends GetxController {
   var isEditLoading = false.obs;
   var isInitialized = false.obs;
 
+
   RxBool isScanning = false.obs;
 
   SerialModel? serial;

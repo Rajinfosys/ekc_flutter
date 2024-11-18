@@ -152,7 +152,9 @@ class ScanSerialView extends GetView<ScanSerialController> {
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       controller.code.value.text = '';
-                                      Get.toNamed(QrScannerScreen.routeName, arguments: 'scan') ;
+                                      // Get.toNamed(QrScannerScreen.routeName, arguments: 'scan') ;
+                                      QRScannerController.instance.openQrScannerScreen('scan'); // or 'packlist'
+
                                       if (QRScannerController.instance.scannedResult.value != '') {
                                         controller.code.value.text = QRScannerController.instance.scannedResult.value;
                                       }

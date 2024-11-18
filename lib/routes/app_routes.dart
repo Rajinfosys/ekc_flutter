@@ -35,9 +35,9 @@ class AppRoutes {
         name: PartialPackListView.routeName,
         page: () => PartialPackListView(),
         binding: PacklistBinding()),
-    GetPage(
-        name: QrScannerScreen.routeName,
-        page: () => QrScannerScreen(),
-        binding: QRScannerBindings()),
+    // GetPage(
+    //     name: QrScannerScreen.routeName,
+    //     page: () => QrScannerScreen(),
+    //     binding: QRScannerBindings()),
   ];
 }
