@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 import 'package:torch_controller/torch_controller.dart';
 
 import '../../core/utils/app_color.dart';
-import '../qrscanner/qr_scanner_screen.dart';
 
 class ScanSerialView extends GetView<ScanSerialController> {
   ScanSerialView({Key? key}) : super(key: key);

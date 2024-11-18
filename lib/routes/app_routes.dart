@@ -1,6 +1,5 @@
 import 'package:ekc_scan/presentation/packing_list/partial_packing_list.dart';
 import 'package:ekc_scan/presentation/qrscanner/binding/qr_scanner_bindings.dart';
-import 'package:ekc_scan/presentation/qrscanner/qr_scanner_screen.dart';
 import 'package:get/get.dart';
 import 'package:ekc_scan/presentation/auth/auth_screen.dart';
 import 'package:ekc_scan/presentation/auth/splash_screen.dart';

@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 import '../../core/utils/app_color.dart';
 import '../qrscanner/controller/qr_scanner_controller.dart';
-import '../qrscanner/qr_scanner_screen.dart';
+
 
 class PackListView extends GetView<PacklistController> {
   PackListView({Key? key}) : super(key: key);
