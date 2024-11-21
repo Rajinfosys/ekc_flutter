@@ -1,5 +1,5 @@
 {
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "interactive",
-  "dart.flutterSdkPath": "C:\\flutter_sdk\\flutter_3.19.1"
+  "dart.flutterSdkPath": "C:\\flutter_sdk\\flutter_3.24.0"
 }

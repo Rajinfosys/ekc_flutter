@@ -178,12 +178,12 @@ class ScanSerialController extends GetxController {
   }
 
   void clear() {
-    isClientSr.value = false;
+    // isClientSr.value = false;
     code.value.clear();
     qcData.value = null;
-    selectedProduct.value = null;
-    selectedGas.value = null;
-    selectedReason.value = null;
+    // selectedProduct.value = null;
+    // selectedGas.value = null;
+    // selectedReason.value = null;
   }
 
   @override
