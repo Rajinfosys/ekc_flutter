@@ -119,6 +119,60 @@ class PacklistController extends GetxController {
     }
   }
 
+  // void checkSerialNo() async{
+  //   try {
+  //     var user = UserModel.fromJson(jsonDecode(StorageUtil.getUserData()!));
+  //
+  //     Map<String, dynamic> data = {
+  //       "dbtype": "savePackingList",
+  //       "code":
+  //     };
+  //
+  //     var arguments = Get.arguments;
+  //     var isEdit = false;
+  //     if (arguments != null && arguments['isEdit'] == true) {
+  //       isEdit = true;
+  //       data['dbtype'] = "updatePackingList";
+  //       data['packlistid'] = arguments['packlistid'];
+  //     }
+  //
+  //     LogUtil.debug(data);
+  //     // return;
+  //     isLoading(true);
+  //
+  //     try {
+  //       final result = await HttpService.post(_getCommonPath, data);
+  //
+  //       if (result['status'] != 200) {
+  //         Get.snackbar('Error', result['message']);
+  //       } else {
+  //         LogUtil.debug(result);
+  //         if (isEdit) {
+  //           // await getPackingList();
+  //           Get.back(); // back to list screen
+  //           Get.back(); // back to home screen
+  //           Get.snackbar('Success', "Packing List Updated Successfully");
+  //
+  //           // clear stack 2 times
+  //           clear();
+  //         } else {
+  //           Dialogs.showSnackBar(
+  //               Get.context, "Packing List Added Successfully");
+  //           clear();
+  //         }
+  //       }
+  //     } catch (e) {
+  //       LogUtil.error(e);
+  //       Get.snackbar('Error', "$e");
+  //     }
+  //
+  //     isLoading(false);
+  //   } catch (e) {
+  //     isLoading(false);
+  //     Get.snackbar('Error', "$e");
+  //   }
+  // }
+
   Future<void> getPackingList() async {
     try {
       var user = UserModel.fromJson(jsonDecode(StorageUtil.getUserData()!));
