@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import '../../../core/utils/log_util.dart';
+import '../../../service/http_service.dart';
 import '../../home_screen/controller/home_controller.dart';
 import '../../packing_list/controller/packlist_controller.dart';
 import '../../scan_serial/controller/serial_controller.dart';
@@ -13,6 +15,8 @@ class QRScannerController extends GetxController {
   var isFlashOn = false.obs;
   RxDouble linePosition = 0.0.obs;
   var scannedResult = ''.obs;
+
+  static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
 
   // New variables to prevent repeated processing
   String lastScannedCode = '';
@@ -25,6 +29,67 @@ class QRScannerController extends GetxController {
 
   void switchCamera() {
     scannerController.switchCamera();
+  }
+  void checkSerialNo(String code) async {
+    try {
+      // Construct the request body
+      Map<String, dynamic> requestBody = {
+        "dbtype": "checkSerialno",
+        "code": code,
+      };
+
+      // Make the POST API call
+      final result = await HttpService.post(_getCommonPath, requestBody);
+
+      LogUtil.debug(result.toString());
+
+      // Handle the response
+      if (result["status"] != 200) {
+        // Show an error dialog using GetX
+        Get.defaultDialog(
+          title: "Error",
+          titleStyle: TextStyle(color: Colors.red),
+          content: Text(
+            result["message"] ?? "An unknown error occurred.",
+            textAlign: TextAlign.center,
+          ),
+          confirm: ElevatedButton(
+            onPressed: () => Get.back(),
+            child: Text("OK"),
+          ),
+        );
+      } else {
+        // Show a success dialog using GetX
+        Get.defaultDialog(
+          title: "Success",
+          titleStyle: TextStyle(color: Colors.green),
+          content: Text(
+            result["message"] ?? "Operation successful.",
+            textAlign: TextAlign.center,
+          ),
+          confirm: ElevatedButton(
+            onPressed: () => Get.back(),
+            child: Text("OK"),
+          ),
+        );
+      }
+    } catch (e) {
+      LogUtil.error(e);
+
+      // Show an error dialog for exceptions using GetX
+      Get.defaultDialog(
+        title: "Error",
+        titleStyle: TextStyle(color: Colors.red),
+        content: Text(
+          "An error occurred: $e",
+          textAlign: TextAlign.center,
+        ),
+        confirm: ElevatedButton(
+          onPressed: () => Get.back(),
+          child: Text("OK"),
+        ),
+      );
+    }
   }
 
   void animateLine(double boxSize) {
@@ -91,14 +156,16 @@ class QrScannerContent extends StatelessWidget {
 
     if (argument == 'scan') {
       ScanSerialController.instance.code.value.text = code;
+      controller.checkSerialNo(code);
       ScanSerialController.instance.code.refresh();
+
     } else if (argument == 'packlist') {
       var serial = HomePageController.instance.serialList.firstWhereOrNull(
               (element) => element.serialno == code || element.client_serialno == code);
 
       if (serial == null || PacklistController.instance.selectedProduct.value?.productId != serial.productid ||
           PacklistController.instance.selectedGas.value?.gasName != serial.gas_type) {
-        Get.snackbar('Warning', 'Invalid Serial No.', colorText: Colors.white, backgroundColor: Colors.red);
+        controller.checkSerialNo(code);
         return;
       }
 
