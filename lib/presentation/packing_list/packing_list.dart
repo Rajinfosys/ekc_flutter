@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 
 // import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../../core/utils/app_color.dart';
 import '../qrscanner/controller/qr_scanner_controller.dart';
@@ -407,44 +406,44 @@ class PackListView extends GetView<PacklistController> {
                             Expanded(
                               flex: 7,
                               child: DropdownSearch<SerialNoModel>(
-                                asyncItems: (String? filter) async {
-                                  final serialList = HomePageController
-                                      .instance.serialList
-                                      .where((item) {
-                                    return item.productid ==
-                                            controller.selectedProduct.value
-                                                ?.productId &&
-                                        item.gas_type ==
-                                            controller
-                                                .selectedGas.value?.gasName &&
-                                        !controller.packSerialList.any(
-                                            (element) =>
-                                                (element.serialno ==
-                                                    item.serialno) &&
-                                                (element.client_serialno ==
-                                                    item.client_serialno));
-                                  }).toList();
-
-                                  if (filter == null || filter.isEmpty) {
-                                    return serialList;
-                                  } else {
-                                    final matches = serialList.where((item) {
-                                      return controller.isClientSr.value
-                                          ? item.client_serialno!
-                                              .contains(filter)
-                                          : item.serialno!.contains(filter);
-                                    }).toList();
-
-                                    if (matches.isNotEmpty) {
-                                      return matches;
-                                    } else if (controller
-                                        .okButtonPressed.value || !controller.isManual.value) {
-                                      controller.handleOkButtonClick(filter);
-                                      return [];
-                                    }
-                                    return [];
-                                  }
-                                },
+                                // asyncItems: (String? filter) async {
+                                //   final serialList = HomePageController
+                                //       .instance.serialList
+                                //       .where((item) {
+                                //     return item.productid ==
+                                //             controller.selectedProduct.value
+                                //                 ?.productId &&
+                                //         item.gas_type ==
+                                //             controller
+                                //                 .selectedGas.value?.gasName &&
+                                //         !controller.packSerialList.any(
+                                //             (element) =>
+                                //                 (element.serialno ==
+                                //                     item.serialno) &&
+                                //                 (element.client_serialno ==
+                                //                     item.client_serialno));
+                                //   }).toList();
+                                //
+                                //   if (filter == null || filter.isEmpty) {
+                                //     return serialList;
+                                //   } else {
+                                //     final matches = serialList.where((item) {
+                                //       return controller.isClientSr.value
+                                //           ? item.client_serialno!
+                                //               .contains(filter)
+                                //           : item.serialno!.contains(filter);
+                                //     }).toList();
+                                //
+                                //     if (matches.isNotEmpty) {
+                                //       return matches;
+                                //     } else if (controller
+                                //         .okButtonPressed.value || !controller.isManual.value) {
+                                //       controller.handleOkButtonClick(filter);
+                                //       return [];
+                                //     }
+                                //     return [];
+                                //   }
+                                // },
                                 selectedItem: null,
                                 itemAsString: (SerialNoModel u) =>
                                     controller.isClientSr.value
