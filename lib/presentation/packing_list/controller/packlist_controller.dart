@@ -324,7 +324,7 @@ class PacklistController extends GetxController {
     if (details['productid'] != null) {
       selectedProduct.value = HomePageController.instance.productList
           .toList()
-          .firstWhere((element) => element.productId == details['productid']);
+          .firstWhere((element) => element?.productId == details['productid']);
     }
 
     if (details['gas_type'] != null) {

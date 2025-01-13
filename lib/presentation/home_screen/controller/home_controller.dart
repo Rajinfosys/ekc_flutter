@@ -20,7 +20,7 @@ class HomePageController extends GetxController {
   var isLoading = false.obs;
   var isInitialized = false.obs;
 
-  RxList<ProductModel> productList = RxList.empty();
+  RxList<ProductModel?> productList = RxList.empty();
   RxList<GasModel> gasList = RxList.empty();
   RxList<ReasonModel> reasonList = RxList.empty();
   RxList<PartyModel> partyList = RxList.empty();

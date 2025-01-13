@@ -174,7 +174,7 @@ class PackListView extends GetView<PacklistController> {
                         SizedBox(
                           height: Get.height * dropSize,
                         ),
-                        DropdownSearch<ProductModel>(
+                        DropdownButtonFormField<ProductModel>(
                           validator: (ProductModel? input) {
                             if (input?.productName == null) {
                               Get.snackbar('Warning', 'Select Product',
@@ -184,19 +184,27 @@ class PackListView extends GetView<PacklistController> {
                             }
                             return null;
                           },
-                          enabled: !isEdit,
-                          items:
-                              HomePageController.instance.productList.toList(),
-                          itemAsString: (ProductModel u) => u.productName!,
+                          // enabled: !isEdit,
+                          items: HomePageController.instance.productList.map<DropdownMenuItem<ProductModel>>(
+                                  (ProductModel? value) {
+                                return DropdownMenuItem<ProductModel>(
+                                  value: value,
+                                  child: Text(
+                                    '${value?.productName}',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                          // itemAsString: (ProductModel u) => u.productName!,
                           onChanged: controller.setProductValue,
-                          selectedItem: controller.selectedProduct.value,
-                          compareFn:
+                          // selectedItem: controller.selectedProduct.value,
+                          /*compareFn:
                               (ProductModel? item1, ProductModel? item2) =>
                                   true,
                           popupProps: const PopupProps.menu(
                             isFilterOnline: true,
                             showSearchBox: true,
-                          ),
+                          ),*/
                         ),
                         const SizedBox(
                           height: 20,
@@ -208,7 +216,7 @@ class PackListView extends GetView<PacklistController> {
                         SizedBox(
                           height: Get.height * dropSize,
                         ),
-                        DropdownSearch<GasModel>(
+                        DropdownButtonFormField<GasModel>(
                           validator: (GasModel? input) {
                             if (input?.gasName == null) {
                               Get.snackbar('Warning', 'Select Gas',
@@ -218,16 +226,25 @@ class PackListView extends GetView<PacklistController> {
                             }
                             return null;
                           },
-                          enabled: !isEdit,
-                          items: HomePageController.instance.gasList.toList(),
-                          itemAsString: (GasModel u) => u.gasName!,
+                          // enabled: !isEdit,
+                          items: HomePageController.instance.gasList.map<DropdownMenuItem<GasModel>>(
+                                  (GasModel? value) {
+                                return DropdownMenuItem<GasModel>(
+                                  value: value,
+                                  child: Text(
+                                    '${value?.gasName}',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                          // itemAsString: (GasModel u) => u.gasName!,
                           onChanged: controller.setGasValue,
-                          compareFn: (GasModel? item1, GasModel? item2) => true,
-                          selectedItem: controller.selectedGas.value,
-                          popupProps: const PopupProps.menu(
-                            isFilterOnline: true,
-                            showSearchBox: true,
-                          ),
+                          // compareFn: (GasModel? item1, GasModel? item2) => true,
+                          // selectedItem: controller.selectedGas.value,
+                          // popupProps: const PopupProps.menu(
+                          //   isFilterOnline: true,
+                          //   showSearchBox: true,
+                          // ),
                         ),
                         const SizedBox(
                           height: 20,
@@ -239,7 +256,7 @@ class PackListView extends GetView<PacklistController> {
                         SizedBox(
                           height: Get.height * dropSize,
                         ),
-                        DropdownSearch<PartyModel>(
+                        DropdownButtonFormField<PartyModel>(
                           validator: (PartyModel? input) {
                             if (input?.fullname == null) {
                               Get.snackbar('Warning', 'Select Party',
@@ -249,17 +266,26 @@ class PackListView extends GetView<PacklistController> {
                             }
                             return null;
                           },
-                          enabled: !isEdit,
-                          items: HomePageController.instance.partyList.toList(),
-                          selectedItem: controller.selectedParty.value,
-                          itemAsString: (PartyModel u) => u.fullname!,
+                          // enabled: !isEdit,
+                          items: HomePageController.instance.partyList.map<DropdownMenuItem<PartyModel>>(
+                                                            (PartyModel? value) {
+                                                          return DropdownMenuItem<PartyModel>(
+                                                            value: value,
+                                                            child: Text(
+                                                              '${value?.fullname}',
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                          // selectedItem: controller.selectedParty.value,
+                          // itemAsString: (PartyModel u) => u.fullname!,
                           onChanged: controller.setPartyValue,
-                          compareFn: (PartyModel? item1, PartyModel? item2) =>
-                              true,
-                          popupProps: const PopupProps.menu(
-                            isFilterOnline: true,
-                            showSearchBox: true,
-                          ),
+                          // compareFn: (PartyModel? item1, PartyModel? item2) =>
+                          //     true,
+                          // popupProps: const PopupProps.menu(
+                          //   isFilterOnline: true,
+                          //   showSearchBox: true,
+                          // ),
                         ),
                         const SizedBox(
                           height: 25,
@@ -434,7 +460,7 @@ class PackListView extends GetView<PacklistController> {
                                         SerialNoModel? item2) =>
                                     true,
                                 popupProps: PopupProps.menu(
-                                  isFilterOnline: true,
+                                  // isFilterOnline: true,
                                   showSearchBox: true,
                                   searchFieldProps: TextFieldProps(
                                     controller: controller.searchController,
