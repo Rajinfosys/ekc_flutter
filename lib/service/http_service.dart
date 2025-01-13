@@ -37,8 +37,8 @@ class HttpService {
   final dio.BaseOptions _baseOptions =
       dio.BaseOptions(baseUrl: _baseUrl,
           // receiveDataWhenStatusError: true,
-          receiveTimeout: const Duration(seconds: 10),
-          connectTimeout: const Duration(seconds: 5),
+          // receiveTimeout: const Duration(seconds: 10),
+          // connectTimeout: const Duration(seconds: 10),
           // connectTimeout: const Duration(seconds: 60),
           // receiveTimeout: const Duration(seconds: 60),
           // sendTimeout: const Duration(seconds: 60),

@@ -55,7 +55,8 @@ class PacklistController extends GetxController {
 
   static PacklistController get instance => Get.find<PacklistController>();
 
-  static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
+  //static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
+  static const String _getCommonPath = '/api_qrcode/index.php';
 
   void checkSerialNo(String code) async {
     try {

@@ -38,8 +38,8 @@ class ScanSerialController extends GetxController {
 
   static ScanSerialController get instance => Get.find<ScanSerialController>();
 
-  static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
-
+  //static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
+  static const String _getCommonPath = '/api_qrcode/index.php';
   void updateSerial() async {
     try {
       var user = UserModel.fromJson(jsonDecode(StorageUtil.getUserData()!));

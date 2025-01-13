@@ -16,7 +16,8 @@ class QRScannerController extends GetxController {
   RxDouble linePosition = 0.0.obs;
   var scannedResult = ''.obs;
 
-  static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
+  //static const String _getCommonPath = '/scriptcase/app/ekc_qc/api_qrcode/index.php';
+  static const String _getCommonPath = '/api_qrcode/index.php';
 
   // New variables to prevent repeated processing
   String lastScannedCode = '';

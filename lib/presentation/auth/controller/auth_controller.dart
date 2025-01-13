@@ -18,8 +18,8 @@ class AuthController extends GetxController {
   RxBool isObscure = RxBool(false);
   UserModel? user;
 
-  static const String _loginPath = '/scriptcase/app/ekc_qc/api_login/index.php';
-
+  //static const String _loginPath = '/scriptcase/app/ekc_qc/api_login/index.php';
+  static const String _loginPath = '/api_login/index.php';
   Rx<TextEditingController> apiBase = TextEditingController().obs;
 
   @override
